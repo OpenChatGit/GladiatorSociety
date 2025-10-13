@@ -1,0 +1,14 @@
+{
+  "whitelist": [
+    "hegemony", "tritachyon", "persean", "independent", "pirates"
+  ],
+  "blacklist": [
+    "player", "neutral"
+  ],
+  "includeHidden": false,
+  "minFleetPointsForValidity": 20,
+  "validateUsingFleetGen": true,
+  "validationFleetType": "gs_validation",
+  "vanillaModdedSplit": 0.5,
+  "debug": false
+}

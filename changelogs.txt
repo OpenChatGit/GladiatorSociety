@@ -1,0 +1,292 @@
+Version 1.4.1 (Balance Update + Bugfixes):
+- BALANCING: Significantly nerfed reward scaling in both Endless and Fleet Battle modes
+  - Endless Battle: Power scaling reduced from 10%+10 to 7%+5 (under 400), and from 5% to 3.5% (over 400)
+  - Endless Battle: Power multiplier reduced from 1.5x to 1.3x
+  - Endless Battle: Credit reward formula nerfed (coefficient: 4.5 → 3.0, linear: 1000 → 800)
+  - Fleet Battle: Ally scaling reduced from 12%+8/6% to 8%+5/4%
+  - Fleet Battle: Enemy scaling reduced from 14%+10/8% to 10%+6/5%
+  - Fleet Battle: Power multipliers reduced (Ally: 1.4x → 1.25x, Enemy: 1.5x → 1.35x)
+  - Fleet Battle: Credit rewards nerfed to match Endless nerf
+- This should make the progression feel more balanced and less exponential
+- BUGFIX: Fixed missing Rule Command classes in JAR (GladiatorSociety_ShowDefaultVisual and others)
+- BUGFIX: Fixed Fleet Battle ally fleet not being properly removed after battle ends or when aborting
+  - Ally and enemy fleets are now properly despawned and removed from the sector
+- IMPORTANT: Some features from patch 1.4.0 were lost due to GitHub account password issues
+  - Please download the new version from GitHub to restore auto-update functionality
+  - This ensures proper auto-update support and prevents future version conflicts
+
+Version 1.3.6 (hotfix):
+- Dynamic Faction Detection: conflict-safe validation so only factions that can actually generate combat fleets are included.
+- New config flags in `data/config/gs_factions.json`:
+  - `validateUsingFleetGen` (bool): toggle validation via tiny test fleets.
+  - `validationFleetType` (string): special fleet type used only for validation to avoid conflicts with other mods.
+  - `vanillaModdedSplit` (0.0–1.0): controls vanilla vs modded selection chance (default 0.5 for equal chance).
+- Validation fleets are hidden from gameplay and skip GS-specific interaction setup to reduce mod conflicts.
+- Endless Mode uses the configurable vanilla/modded split; modded factions have the same chance to spawn as vanilla by default.
+- Minor robustness: safer clamping and guards around config usage.
+
+Version 1.3.5 (hotfix):
+- Endless Mode: added null-safety when starting duels to prevent a rare crash if the enemy fleet could not be generated.
+- Added safe faction fallbacks (pirates → independent) during fleet generation to increase robustness.
+- Shows a clear message and cancels gracefully if fleet generation still fails, instead of crashing.
+
+Version 1.3.4:
+-- Dependencies: Requires Nexerelin. LazyLib has been added as a dependency but is not yet used.
+- Added Fleet Battles improvements: allied fleet now reliably spawns and joins battles alongside the player.
+- Deployment points now correctly count allied ships on the player side.
+- Implemented Fleet Battles reward flow: periodic blueprint rewards and random unique ship rewards based on defeated enemy composition.
+- Credit rewards in Fleet Battles slightly reduced vs Endless to account for ally support.
+- Fixed stability issues in fleet spawning and improved diagnostic messages.
+ - Dynamic Mod Faction Detection: runtime scan of all loaded factions (vanilla + modded), filtered via `data/config/gs_factions.json`.
+ - 50/50 vanilla vs modded faction selection for both Fleet Battles and Endless Mode, with robust fallbacks if a bucket is empty.
+ - Auto-refresh of discovered factions when mods are added/removed (cache updates automatically on next access).
+ - Endless Mode now uses the dynamic faction pool for enemy selection (CSV whitelist no longer required for factions).
+ - Improved spawn robustness and null-guards to avoid crashes when a faction can't produce a fleet; safe cancellation and cleanup.
+
+Version 1.3.3:
+- Completely removed the old dialog-based reward system
+- All rewards are now given automatically when reaching specific rounds
+- Fixed ship rewards not being properly added to the player's fleet
+- Added 20% chance to receive duplicate rewards
+- Implemented progressive reward system where higher-value rewards become more likely in later rounds
+- Improved feedback messages for different reward types
+- Added better error handling and logging for reward distribution
+- Optimized code for better performance
+- Removed the "Reward" button from the dialog interface
+- Ships are now properly added directly to your fleet (not just as blueprints)
+- The system now properly handles both hull IDs and variant IDs
+
+Version 1.3.2:
+- Added new Blueprint Reward System to Endless Battle mode
+- Every 3 rounds in Endless Battle now rewards a blueprint based on current credit value
+- Existing reward system remains for now but will be removed once the new system is fully refined
+- Fixed issues with rule commands in dialog system
+- Updated ship and weapon IDs to match actual game files
+- Added more variety to fighter wing rewards
+- Improved reward scaling with battle difficulty
+- Fixed compatibility issues with Starsector 0.98a
+
+Version 1.3.1:
+- Updated for compatibility with Starsector 0.98a.
+- Fixed JSON syntax error in mod_info.json.
+- Incremented mod version for re-release and maintenance.
+
+Version 1.3(beta):
+-Update for latest Starsector
+-Rebalance reward/power of each base bounty for be more balance.
+-The amount of credits reward on endless has be reduced.
+
+
+Version 1.2b:
+-Add Yuri Faction to Endless faction.
+
+
+Version 1.2a(hotfix):
+-Fix the gladiator bounty where nothing spawn.
+
+
+Version 1.2:
+-Because alpha, reset what you have done on Bounty and Endless battle.
+-Now, you will fight directly fleet, without any allies.
+-Display all gladiator bounty (no level requirment), now.
+-Display force on bounty right on the name.
+
+
+
+Version 1.2alpha(break save):
+-Remove every unique contents except 3 ships.
+-Remove tips (because, well, nothing to add, needed to be removed)
+-Modify the reward of endless battle.  (Hullmod, fighter, weapon, blueprint)
+-Remove the difficulty display and just display something else.
+-Fix nullpointerexception with ships with modules.
+
+
+
+
+Version 1.1e:
+-Add incompatibility mods check.
+
+Version 1.1d:
+-Fix "difficulty display"
+-Display every missions on the Gladiator tab, now.
+
+Version 1.1c:
+-The intel remove correctly the Gladiator stuff.
+
+Version 1.1b: 
+-Fix text
+-Update for 0.9.1a
+-Increase ships price(but useless? xD)
+
+
+Version 1.1pre: (Break probably save for save who has already the mod)
+-Posted early for the fix, but a ton of bounty will appears when they will be done, with the new dependencies stuff.
+-Fix a crash.
+-fix a bit the Gladiator faction for be sure than they never retreat.
+-Add dependencies and others stuffs for support others mods on GS Bounty.
+-Fix every bounty who depends of variants of another mod.
+-Add a bounty who need 9 mods to be enabled. And some are not available for the moment. 
+-Nerfed remnant and delerict bounty.
+-Add two portraits for some fleet.
+
+
+Version 1.0c: (Do not break save)
+Users:
+-Update Gladiator Society can cause to reset your round of the Endless Battle or reset Gladiator bounty.
+-Add useless tips. (Because you do not need true tip)
+-Fix some broken mission.
+-Fix endless ships available on blueprint.
+-GS Fleet spawn on you, now. And attack you directly.
+-Display a difficulty of the bounty, battle.
+-Display the faction too.
+-Add a portrait for the exemple of unique portrait.
+-Modify completely how work the reward on endless battle.
+Modders:
+-Now you can add your own unique ship on the Endless Battle. (We do not have put a limiter, currently)
+
+
+
+Version 1.0b:
+-update for 0.9.
+-Lost dynasector compatibility.
+-Per logic: Lost big capital fleet.
+-Per logic2: Lost REAL good auto-variant.
+-I have not removed the tag on the bounty config in case Dynasector comeback.
+-GLADIATOR
+-I can write what i want here.
+-Serious changelog: Lost many balance on this mod, it depend seriously of what mods you enable, often.
+
+
+
+Version 1.0:Break save.
+-Add the three lasts capitals.
+-Replace the Lizard Hug per a another cruiser.
+-Add paintjob on somes ships.
+
+Version 0.9c:
+-fix maybe random crash?
+-Fix a ship(add the thruster of the ship)
+-Remove Delerict from Endless battle.
+
+Version 0.9b:
+-Fix a nullpointer(do not crash you, just block you to continue) on endless battle if you add custom faction but do not enable them.
+-Increase the number of Officer on endless battle and Gladiator Fleet.
+-Increase the limit of combatPoints to 2000 from 400.
+
+
+
+Version 0.9:
+- Add Future Nex fix.
+- Fix System Weapon.
+- Fix Prism freeport bug.
+- Buff per two the fuzzinator drone, but disable the shield. (The terminator 0.9 do not have shield)
+- Add three cruisers.
+- Add a dev function on the Endless battle
+- Fix every saving problem. (Reset all, too, sorry.)
+- Fix dialog problem with Gladiator fleet.
+- Fix deprecated method.
+- Add a logged paper on the log.
+- Endless battle faction is choosen now after each battle, not when you launch it, for keep you to reload.
+- Fix problem with custom unique portrait, You will need to read the readme.txt for see what
+
+Version 0.82(fix):
+-Fix random crash.
+
+Version 0.81(fix):
+-Fast fix of Nex relation.
+
+
+Version 0.8:
+-Increase the supply cost of all Endless ships.
+-Add the last destroyer.
+-Update the final sprite of these destroyers.
+-Modify many value on Endless ships.
+-Fix the deprecated method.(Do not work on old save, need new game)
+
+
+
+Version 0.76:(Fix)
+-Fix strange null crash.
+
+
+Version 0.75:(Do not break save, probably.)
+-Thank to Night Kev for have authorized me to take the personality hullmod code.
+-Deprecrate the tag "ships" on GS Bounty.
+-Add the tag "advships" on GS Bounty.(Work differently for add custom personality)
+-Add the tag "officerPersonality" for your main officer. Logic, but a bit late.
+-Remove the Mercury ship of the Badaboum fleet, replaced with a another ship.
+-Fix a problem with fight Gladiator fleet where market on the system wannot trade with you.
+-Fix a problem with the Prism Freeport.
+-Fix many bug if you do not have Dynasector or Nexerelin
+-add two reward on the round 10
+
+
+
+Version 0.7:(break save)
+-The update will break the current save.
+-Modify the faction than you can fight on the Endless Battle, limited to Vanilla faction except if others mods add a tiny file.
+-Add a reward system on the Endless Battle.(Currently 3 frigates only)
+-Add Dynasector doctrine. If you have dynasector installed, GS Bounty or endless battle will have more capital than tiny ships.
+-Fix the lack of Officers AI on the enemy fleet.
+-Fix for finish, maybe, the (censored) bug of neutral Gladiator.
+-add a CSV on the folder gsbounty for add your faction to the random faction list on the Endless battle.
+
+
+
+Version 0.6:
+-Fix the problem of neutral fleet.
+-Add the Endless Battle on the Com relay, for the end-game where you fight randomly a existing faction.
+
+
+
+Version 0.51:
+-fix a thing(remove a BONJOUR)
+
+
+Version 0.5:
+
+Update:
+	-Fix Linux Typo.
+	-Move the Gladiator society on every com relay. (They dissapears of the market)
+	-Do not need a new game, but if you update on your current save, you can done these missions twices with the market and com relay
+	-Fix a problem of relation with the Gladiator Society when they are neutral.
+Com Relay:
+	-For the moment, one option, you can choice to look Bounty available, if 0 bounty, so you have the level or just finish all missions.
+
+
+
+Version 0.4:(Do not need a new game)
+Player:
+-Add a SWP Bounty
+-Fix Remnant/Delerict bounty  flagship.
+-Add Dynasector functionality. (If Dynasector enabled, the part of the random bounty fleet will be build per Dynasector.
+Variant on the "ships" and flagship will be ignored.) (Thank to Nexerelin to have already this thing)
+-Bounty are available now also on pirate, because Gladiator is a bit not very legal too.(And for Pirate Run)
+Modders:
+-Add a line on the framework bounty for randomize completely your fleet or just the random fleet added on your fleet(if true)
+
+
+Version 0.3:
+-Hide the portrait on mission, and retire the exact location too.
+-Add a three mission
+
+
+Version 0.23:(FixofFixOffix)
+-Fix for the good time the fix of 0.2
+
+
+Version 0.22:(Fix)
+-Fix a crash who have not be fixed..., maybe?
+-Update readme.txt with the help of Strages.
+
+
+Version 0.21:(hotfix)
+-Need a new game for have the fix.
+-Fix a crash
+
+
+Version 0.2:
+-This version do not change your current game, you will need a new game for see theses effects. He do not break your current save
+-Increase the number of Level of the player for highter missions.
+-For chain of missions, add a TAG "needBounty":"missionid", if put, he will ignore the bounty at least you have done the mission of the missionid  
+-Bounty on the market do not respawn after 1 days but 5 days, now.

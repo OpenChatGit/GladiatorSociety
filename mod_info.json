@@ -1,0 +1,20 @@
+{
+  "id":"gladiatorsociety",
+  "name":"Gladiator Society",
+  "author":"Author - Snrasha - Maintainer NicoBBQ",
+  "version": "1.4.1",
+  "description":"Gladiator Society adds special mission bounties and an endless battle mode with progressive rewards.",
+  "gameVersion":"0.98a",
+  "modPlugin":"src.data.scripts.world.GladiatorSociety_ModPlugin",
+  "jars":["jars/GladiatorSociety.jar"],
+  "dependencies": [
+    {
+      "id": "nexerelin",
+      "name": "Nexerelin"
+    },
+    {
+      "id": "lw_lazylib",
+      "name": "LazyLib"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+item_id,blueprint_type,category,min_credit_value,max_credit_value,weight,name
+# Frigate Blueprints (Low Value: 0-25000) - Using hull IDs instead of variants
+lasher,ship,frigate,0,25000,10,Lasher Frigate
+wolf,ship,frigate,0,25000,8,Wolf Frigate
+kite,ship,frigate,0,25000,12,Kite Frigate
+hound,ship,frigate,0,25000,10,Hound Frigate
+# Basic Weapons (Low Value) - Verified from weapon_data.csv
+lightac,weapon,basic,0,25000,15,Light Autocannon
+lightmg,weapon,basic,0,25000,15,Light Machine Gun
+vulcan,weapon,basic,0,25000,10,Vulcan Cannon
+lightmortar,weapon,basic,0,25000,12,Light Mortar
+# Basic Fighters (Low Value) - Verified from variants/fighters
+talon_wing,fighter,basic,0,25000,12,Talon Wing
+piranha_wing,fighter,basic,0,25000,8,Piranha Wing
+wasp_wing,fighter,basic,0,25000,10,Wasp Wing
+# Destroyer Blueprints (Mid Value: 25000-100000) - Using hull IDs instead of variants
+hammerhead,ship,destroyer,25000,100000,12,Hammerhead Destroyer
+sunder,ship,destroyer,25000,100000,10,Sunder Destroyer
+enforcer,ship,destroyer,25000,100000,10,Enforcer Destroyer
+# Advanced Weapons (Mid Value) - Verified from weapon_data.csv
+heavyac,weapon,advanced,25000,100000,12,Heavy Autocannon
+heavymg,weapon,advanced,25000,100000,12,Heavy Machine Gun
+arbalest,weapon,advanced,25000,100000,8,Arbalest Autocannon
+hveldriver,weapon,advanced,25000,100000,10,Hypervelocity Driver
+# Advanced Fighters (Mid Value) - Verified from variants/fighters
+broadsword_wing,fighter,advanced,25000,100000,10,Broadsword Wing
+dagger_wing,fighter,advanced,25000,100000,8,Dagger Wing
+gladius_wing,fighter,advanced,25000,100000,9,Gladius Wing
+# Hull Mods removed for now - complex to implement
+# Cruiser Blueprints (High Value: 100000-300000) - Using hull IDs instead of variants
+eagle,ship,cruiser,100000,300000,10,Eagle Cruiser
+falcon,ship,cruiser,100000,300000,8,Falcon Cruiser
+venture,ship,cruiser,100000,300000,12,Venture Cruiser
+aurora,ship,cruiser,100000,300000,6,Aurora Cruiser
+# High-End Weapons (High Value) - Verified from weapon_data.csv
+gauss,weapon,highend,100000,300000,8,Gauss Cannon
+mjolnir,weapon,highend,100000,300000,6,Mjolnir Cannon
+hellbore,weapon,highend,100000,300000,8,Hellbore Cannon
+mark9,weapon,highend,100000,300000,10,Mark IX Autocannon
+# Elite Fighters (High Value) - Verified from variants/fighters
+thunder_wing,fighter,elite,100000,300000,8,Thunder Wing
+longbow_wing,fighter,elite,100000,300000,6,Longbow Wing
+khopesh_wing,fighter,elite,100000,300000,7,Khopesh Wing
+# Advanced Hull Mods removed for now - complex to implement
+# Capital Ships (Premium Value: 300000+) - Using hull IDs instead of variants
+onslaught,ship,capital,300000,999999,6,Onslaught Battleship
+paragon,ship,capital,300000,999999,4,Paragon Battleship
+astral,ship,capital,300000,999999,5,Astral Carrier
+legion,ship,capital,300000,999999,5,Legion Battlecarrier
+# Premium Weapons (Premium Value)
+tachyonlance,weapon,premium,300000,999999,4,Tachyon Lance
+gigacannon,weapon,premium,300000,999999,5,Gigacannon
+plasma,weapon,premium,300000,999999,6,Plasma Cannon
+devastator,weapon,premium,300000,999999,5,Devastator Cannon
+# Premium Fighters (Premium Value) - Verified from variants/fighters
+trident_wing,fighter,premium,300000,999999,6,Trident Wing
+xyphos_wing,fighter,premium,300000,999999,4,Xyphos Wing
+cobra_wing,fighter,premium,300000,999999,5,Cobra Wing
+# Premium Hull Mods removed for now - complex to implement
