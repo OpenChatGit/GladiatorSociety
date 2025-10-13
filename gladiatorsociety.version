@@ -1,6 +1,6 @@
 {
-    "changelogURL":"https://github.com/OpenChatGit/GladiatorSociety/blob/main/changelogs.txt",
-    "masterVersionFile":"https://github.com/OpenChatGit/GladiatorSociety/blob/main/gladiatorsociety.version",
+    "changelogURL":"https://raw.githubusercontent.com/OpenChatGit/GladiatorSociety/refs/tags/1.4.1/changelogs.txt",
+    "masterVersionFile":"https://raw.githubusercontent.com/OpenChatGit/GladiatorSociety/main/gladiatorsociety.version",
     "modName":"Gladiator Society",
     "modThreadId":33586,
     "modVersion":
