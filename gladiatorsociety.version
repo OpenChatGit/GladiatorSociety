@@ -1,6 +1,6 @@
 {
-    "changelogURL":"https://raw.githubusercontent.com/goodvirus-project/GladiatorSociety/refs/tags/1.4.0/changelogs.txt",
-    "masterVersionFile":"https://raw.githubusercontent.com/goodvirus-project/GladiatorSociety/master/gladiatorsociety.version",
+    "changelogURL":"https://github.com/OpenChatGit/GladiatorSociety/blob/main/changelogs.txt",
+    "masterVersionFile":"https://github.com/OpenChatGit/GladiatorSociety/blob/main/gladiatorsociety.version",
     "modName":"Gladiator Society",
     "modThreadId":33586,
     "modVersion":
@@ -11,5 +11,5 @@
     },
     "modVersionString":"1.4.1",
     "starsectorVersion":"0.98a",
-    "directDownloadURL":"https://github.com/goodvirus-project/GladiatorSociety/releases/download/1.4.0/GladiatorSociety.zip"
+    "directDownloadURL":"https://github.com/OpenChatGit/GladiatorSociety/releases/download/1.4.1/GladiatorSociety-1.4.1.zip"
 }
