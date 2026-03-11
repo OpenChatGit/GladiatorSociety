@@ -1,5 +1,5 @@
 {
-    "masterVersionFile": "https://raw.githubusercontent.com/NicoBBQ/GladiatorSociety/master/gladiatorsociety.version",
+    "masterVersionFile": "https://raw.githubusercontent.com/OpenChatGit/GladiatorSociety/refs/heads/main/gladiatorsociety.version",
     "modName": "Gladiator Society",
     "modThreadId": 33586,
     "modVersion": {
@@ -8,6 +8,6 @@
         "patch": 0
     },
     "starsectorVersion": "0.98a",
-    "directDownloadURL": "https://github.com/NicoBBQ/GladiatorSociety/releases/latest/download/GladiatorSociety.zip",
-    "changelogURL": "https://raw.githubusercontent.com/NicoBBQ/GladiatorSociety/master/changelogs.txt"
+    "directDownloadURL": "https://github.com/OpenChatGit/GladiatorSociety/releases/download/1.5.0/GladiatorSociety-1.5.0.zip",
+    "changelogURL": "https://raw.githubusercontent.com/OpenChatGit/GladiatorSociety/refs/heads/main/changelogs.txt"
 }
