@@ -39,21 +39,9 @@ gladiator_Accept2,DialogOptionSelected,$option == Accept2,GladiatorSociety_Gladi
 # Gladiator Endless Battle,,,,,,
 gladiator_EndlessOption,GladiatorComRelay,,SetShortcut gladiatorEndlessBattle F,,20:gladiatorEndlessBattle:Endless Battle,
 gladiator_Endless,DialogOptionSelected,$option == gladiatorEndlessBattle,FireAll GladiatorEndless,,,
-gladiator_EndlessByTrigger,GladiatorEndless,,GladiatorSociety_GladiatorEndless Display,"Endless Battle is meant for the thrill of death rather than profit. Every fleet you destroy increases the power of the next.
-After beat a number of fleet, you can choice ship reward.
-",,
+gladiator_EndlessByTrigger,GladiatorEndless,,GladiatorSociety_GladiatorEndless Display,"Endless Battle pits you against an ever-growing fleet. Every victory increases the power of the next enemy. Rewards are given automatically after each win.",,
 gladiator_EndlessAccept,DialogOptionSelected,$option == AcceptEndless,GladiatorSociety_GladiatorEndless Accept,,,
-gladiator_EndlessReward,DialogOptionSelected,$option == RewardEndless,GladiatorSociety_GladiatorEndless Reward,,,
 gladiator_EndlessIncrement,DialogOptionSelected,$option == DevIncEndless,GladiatorSociety_GladiatorEndless Increment,,,
-,,,,,,
-gladiator_ERList0,DialogOptionSelected,$option == endless_reward0,"GladiatorSociety_GladiatorEndless Choice 0
-FireAll GladiatorEndless",,,
-gladiator_ERList1,DialogOptionSelected,$option == endless_reward1,"GladiatorSociety_GladiatorEndless Choice 1
-FireAll GladiatorEndless",,,
-gladiator_ERList2,DialogOptionSelected,$option == endless_reward2,"GladiatorSociety_GladiatorEndless Choice 2
-FireAll GladiatorEndless",,,
-gladiator_ERList3,DialogOptionSelected,$option == endless_reward3,"GladiatorSociety_GladiatorEndless Choice 3
-FireAll GladiatorEndless",,,
 ,,,,,,
 # Gladiator Fleet Battles
 gladiator_FleetOption,GladiatorComRelay,,SetShortcut gladiatorFleetBattles H,,20:gladiatorFleetBattles:Fleet Battles,

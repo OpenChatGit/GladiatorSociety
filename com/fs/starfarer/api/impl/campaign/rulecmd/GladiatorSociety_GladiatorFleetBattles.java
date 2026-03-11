@@ -224,6 +224,7 @@ public class GladiatorSociety_GladiatorFleetBattles extends BaseCommandPlugin {
                         } catch (Throwable ignored) {}
                         int payment = (int) (content.getCreditReward() * involvement);
                         Global.getSector().getPlayerFleet().getCargo().getCredits().add(payment);
+                        src.data.scripts.campaign.GladiatorSociety_RewardIntel.notifyCredits(payment, "Fleet Battle");
                         // Try to award a unique ship based on the defeated enemy composition (budget scales with round)
                         int budgetFP = Math.min(10 + content.getRound() * 3, 60);
                         try {

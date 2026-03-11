@@ -6,7 +6,7 @@ import com.fs.starfarer.api.combat.ShipAPI;
 
 //From Autonomous Ship http://fractalsoftworks.com/forum/index.php?topic=13199.0
 public abstract class GladiatorSociety_AbstractPersonalityHullMod extends BaseHullMod {
-    private static final String PREFIX = "autonomous_personality_";
+    private static final String PREFIX = "GladiatorSociety_";
     private String personality;
 
     GladiatorSociety_AbstractPersonalityHullMod(String personality) {

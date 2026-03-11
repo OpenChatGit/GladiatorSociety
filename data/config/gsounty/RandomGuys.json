@@ -9,7 +9,8 @@
     "advships":[], # Variants added after the mainShip
     "randomFleet":true, # If random fleet(from the faction) will be added.
     "dsrandom":2,
-    "reward":50000, # Bounty reward.
+    "reward":50000,
+    "difficulty":"Easy",
     "combatPoints":5,
     "description":"The Gladiators of this match are so annoying that your opponent doesn't get a name",
     "dialog":"Hello, what's up? Gonna die today?",

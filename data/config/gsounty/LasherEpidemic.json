@@ -9,8 +9,9 @@
     "advships":[["GladiatorSociety_lasher_Raccoon",11,"aggressive"],["lasher_luddic_path_Raider",14,"aggressive"]],
     "randomFleet":false, # If random fleet(from the faction) will be added.
     "dsrandom":1,
-    "reward":85000, # Bounty reward.
-    "description":"Raccoon searches to entertain the public with his sheer swarm of ships. This isn't a hard Gladiator. But he knows how he likes his matches.",
+    "reward":85000,
+    "difficulty":"Easy",
+    "description":"Raccoon seeks to entertain the public with his sheer swarm of ships. This isn't a hard Gladiator. But he knows how he likes his matches.",
     "dialog":"DESTROYYYEIOHRIUGREGLRGRMRIGHGRGRO EVERYTHINGGGEFIORGHREHMRGUEIIQRGUEIA",
 
     "avatar":"graphics/portraits/GladiatorSociety_HollowKnight.png", # Portrait of the Gladiator

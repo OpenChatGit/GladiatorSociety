@@ -1,0 +1,17 @@
+{
+    "faction":"tritachyon",
+    "firstname":"Syla",
+    "lastname":"Vex",
+    "gender":"F",
+    "officerlevel":-1,
+    "officerPersonality":"reckless",
+    "mainShip":"shade_Assault",
+    "advships":[["GladiatorSociety_Night_Fury_Assault",2,"reckless"],["harbinger_Strike",2,"reckless"]],
+    "randomFleet":false,
+    "dsrandom":1,
+    "reward":130000,
+    "difficulty":"Hard",
+    "description":"Syla Vex is a Tri-Tachyon test pilot who volunteered for the Gladiator Society to field-test experimental phase technology. She is fast, unpredictable, and has never lost a match.",
+    "dialog":"You cannot hit what you cannot see. Let me demonstrate.",
+    "avatar":"graphics/portraits/portrait22.png"
+}

@@ -151,13 +151,23 @@ public class GladiatorSociety_GladiatorAvailable extends BaseCommandPlugin {
         float point = Global.getSector().getPlayerFleet().getFleetPoints();
         float pointGS = mission.fleetPoints;
         
-        dialog.getTextPanel().addParagraph("Estimated Comparaison force : You(" + point + ") Ennemi(" + pointGS + ")", Color.RED);
+        dialog.getTextPanel().addParagraph("Estimated force comparison: You(" + point + ") Enemy(" + pointGS + ")", Color.RED);
         //dialog.getTextPanel().highlightInLastPara(dangercolor, difmes);
 
         dialog.getTextPanel().addParagraph(mission.description);
         FactionAPI faction = Global.getSector().getFaction(mission.faction);
         if (faction != null) {
             dialog.getTextPanel().addParagraph("Faction: " + faction.getDisplayNameLongWithArticle());
+        }
+        if (mission.difficulty != null && !mission.difficulty.isEmpty()) {
+            Color diffColor;
+            switch (mission.difficulty.toLowerCase()) {
+                case "easy":    diffColor = new Color(100, 220, 100); break;
+                case "hard":    diffColor = new Color(220, 120, 50);  break;
+                case "extreme": diffColor = Color.RED;                break;
+                default:        diffColor = Color.ORANGE;             break; // medium
+            }
+            dialog.getTextPanel().addParagraph("Difficulty: " + mission.difficulty, diffColor);
         }
         dialog.getTextPanel().addParagraph("WARNING: The fleet will appear near you.", Color.RED);
         opts.addOption("Accept", "Accept" + num, "Accept");
@@ -176,7 +186,7 @@ public class GladiatorSociety_GladiatorAvailable extends BaseCommandPlugin {
 
         opts.clearOptions();
 
-        dialog.getTextPanel().addParagraph("The mission have be accepted");
+        dialog.getTextPanel().addParagraph("The mission has been accepted.");
         // Global.getSector().getCampaignUI().addMessage("GladiatorSociety_BountyMission playerAccept");
         GladiatorSociety_BountyData mission = content.missions.get(num + content.getMaxConcurrent() * content.getNextSet());
         //content.missions.get(num+content.getMaxConcurrent()*content.getNextSet()).playerAccept(Global.getSector().getPlayerFleet().getInteractionTarget());
@@ -245,6 +255,7 @@ public class GladiatorSociety_GladiatorAvailable extends BaseCommandPlugin {
                         } catch (Throwable ignored) {}
                         int payment = (int) (content.currentMission.bountyvalue * involvement);
                         Global.getSector().getPlayerFleet().getCargo().getCredits().add(payment);
+                        src.data.scripts.campaign.GladiatorSociety_RewardIntel.notifyCredits(payment, "Bounty");
                         content.addBountyDone(content.currentMission.missionid);
                     } else {
                         content.missions.add(content.currentMission);

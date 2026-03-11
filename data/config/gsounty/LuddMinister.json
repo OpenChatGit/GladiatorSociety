@@ -1,0 +1,17 @@
+{
+    "faction":"luddic_church",
+    "firstname":"Minister",
+    "lastname":"Aldric",
+    "gender":"M",
+    "officerlevel":-1,
+    "officerPersonality":"cautious",
+    "mainShip":"mora_Assault",
+    "advships":[["enforcer_Assault",2,"steady"],["lasher_Assault",4,"aggressive"]],
+    "randomFleet":false,
+    "dsrandom":1,
+    "reward":90000,
+    "difficulty":"Easy",
+    "description":"Minister Aldric joined the Gladiator Society to fund his congregation's expansion. He is not a violent man by nature, but he is a practical one.",
+    "dialog":"Ludd forgives. I, however, do not.",
+    "avatar":"graphics/portraits/portrait_luddic_church01.png"
+}

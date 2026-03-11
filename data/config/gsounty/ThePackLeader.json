@@ -1,0 +1,17 @@
+{
+    "faction":"pirates",
+    "firstname":"Grak",
+    "lastname":"Bonecrusher",
+    "gender":"M",
+    "officerlevel":-1,
+    "officerPersonality":"aggressive",
+    "mainShip":"falcon_Attack",
+    "advships":[["wolf_Assault",6,"reckless"],["lasher_Assault",8,"aggressive"],["kite_Standard",5,"reckless"]],
+    "randomFleet":false,
+    "dsrandom":1,
+    "reward":95000,
+    "difficulty":"Easy",
+    "description":"Grak leads a pack of fast, aggressive ships. He doesn't care about tactics - he just throws everything at you at once and hopes something sticks. It usually does.",
+    "dialog":"My pack is hungry. You look like a good meal.",
+    "avatar":"graphics/portraits/portrait_mercenary03.png"
+}

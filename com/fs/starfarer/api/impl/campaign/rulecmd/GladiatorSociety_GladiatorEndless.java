@@ -127,7 +127,7 @@ public class GladiatorSociety_GladiatorEndless extends BaseCommandPlugin {
 
                 break;
         }*/
-        dialog.getTextPanel().addParagraph("Estimated Comparaison force : You(" + point + ") Ennemi(" + endcontent.getEndlessPower() + ")", Color.RED);
+        dialog.getTextPanel().addParagraph("Estimated force comparison: You(" + point + ") Enemy(" + endcontent.getEndlessPower() + ")", Color.RED);
 
         //   dialog.getTextPanel().addParagraph("Estimated Difficulty: " + difmes);
         //    dialog.getTextPanel().highlightInLastPara(dangercolor, difmes);
@@ -162,7 +162,7 @@ public class GladiatorSociety_GladiatorEndless extends BaseCommandPlugin {
         OptionPanelAPI opts = dialog.getOptionPanel();
         opts.clearOptions();
         // GladiatorSociety_GladiatorManager.getInstance().createEvent(endcontent);
-        dialog.getTextPanel().addParagraph("The mission have be accepted");
+        dialog.getTextPanel().addParagraph("The mission has been accepted.");
 
         final SectorEntityToken entity = dialog.getInteractionTarget();
         final CampaignFleetAPI endlessfleet = spawnFleet(endcontent);
@@ -234,6 +234,7 @@ public class GladiatorSociety_GladiatorEndless extends BaseCommandPlugin {
                         } catch (Throwable ignored) {}
                         int payment = (int) (endcontent.getEndlessReward() * involvement);
                         Global.getSector().getPlayerFleet().getCargo().getCredits().add(payment);
+                        src.data.scripts.campaign.GladiatorSociety_RewardIntel.notifyCredits(payment, "Endless Battle");
                         endcontent.incEndlessRound();
                         
                         

@@ -4,6 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import src.data.scripts.campaign.GladiatorSociety_FactionDiscoveryConfig;
+import src.data.scripts.campaign.GladiatorSociety_RewardIntel;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -152,12 +153,13 @@ public class GladiatorSociety_EndlessContent {
     }
 
     /**
-     * Calculates the credit reward for the current round
-     * @return Credit reward value
-     * NERFED: Reduced quadratic coefficient from 4.5 to 3.0
+     * Calculates the credit reward for the current round.
+     * Uses a linear formula tied to endlessPower to stay proportional to fleet strength.
+     * Formula: power * 150 + 5000 (flat base)
+     * Examples: round 5 (~p=50) -> ~12.5k, round 10 (~p=195) -> ~34k, round 20 (~p=680) -> ~107k
      */
     public int getEndlessReward() {
-        return (int) (3.0 * Math.pow(endlessPower, 2)) + endlessPower * 800;
+        return endlessPower * 150 + 5000;
     }
 
     /**
@@ -362,10 +364,7 @@ public class GladiatorSociety_EndlessContent {
                     messagePrefix = "Reward: ";
             }
             
-            Global.getSector().getCampaignUI().addMessage(
-                messagePrefix + reward.description,
-                Global.getSettings().getColor("textFriendColor")
-            );
+            GladiatorSociety_RewardIntel.notifyItem(messagePrefix, reward.description);
         }
     }
 }

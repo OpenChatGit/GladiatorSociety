@@ -484,10 +484,10 @@ public class GladiatorSociety_TinyFleetFactoryV2 {
                 member.getRepairTracker().setCR(member.getRepairTracker().getMaxCR());
             }
             // If this is a validator/test fleet, do NOT attach GS interaction or extra behavior
-            GladiatorSociety_FactionDiscoveryConfig cfg = GladiatorSociety_FactionDiscoveryConfig.load();
             boolean isValidation = false;
             try {
-                isValidation = params != null && params.fleetType != null && params.fleetType.equals(cfg.validationFleetType);
+                isValidation = params != null && params.fleetType != null
+                        && params.fleetType.equals(GladiatorSociety_FactionDiscoveryConfig.load().validationFleetType);
             } catch (Throwable ignored) {}
 
             if (!isValidation) {

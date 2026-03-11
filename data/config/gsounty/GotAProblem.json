@@ -10,8 +10,9 @@
 
     "randomFleet":false, # If random fleet(from the faction) will be added.
     "dsrandom":1,
-    "reward":70000, # Bounty reward.
-    "description":"Mr.OfAnti doesn't care who comes after her, the rule 'Do not Kill the opponent' is of no importance to him.",
+    "reward":70000,
+    "difficulty":"Medium",
+    "description":"Matter ofAnti doesn't care who comes after her - the rule 'Do not kill the opponent' means nothing to her.",
     "dialog":"Ready to be crushed?",
     "avatar":"graphics/portraits/portrait34.png", # Portrait of the Gladiator
 }

@@ -1,0 +1,17 @@
+{
+    "faction":"persean",
+    "firstname":"Mira",
+    "lastname":"Solenne",
+    "gender":"F",
+    "officerlevel":-1,
+    "officerPersonality":"aggressive",
+    "mainShip":"eagle_Attack",
+    "advships":[["hammerhead_Balanced",3,"aggressive"],["wolf_Assault",4,"reckless"]],
+    "randomFleet":false,
+    "dsrandom":1,
+    "reward":110000,
+    "difficulty":"Medium",
+    "description":"Mira Solenne is the Persean League's most decorated fleet commander under forty. She fights in the Gladiator Society to prove that the League needs no Hegemony protection.",
+    "dialog":"The League stands on its own. Let me show you why.",
+    "avatar":"graphics/portraits/portrait_persean01.png"
+}

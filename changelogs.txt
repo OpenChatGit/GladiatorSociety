@@ -1,4 +1,76 @@
-Version 1.4.1 (Balance Update + Bugfixes):
+============================================================
+COMING IN 1.6.0 - PLANNED BIG CHANGES
+============================================================
+
+ARENA SYSTEM OVERHAUL
+  The Gladiator Society will no longer be accessible via comm relay.
+  Instead, you will need to travel to a planet that has an Arena
+  structure built on it. Arenas can appear on existing colony planets,
+  or you can construct one yourself on your own colony.
+  This makes the Society feel like a real place in the world rather
+  than a floating menu.
+
+GLADIATOR MERCENARY FACTION
+  A proper Gladiator Society faction will be added to the game world.
+  When a faction at war is about to send a fleet, there is a chance
+  they first dispatch a Gladiator fleet as a vanguard - to soften up
+  the target and test their defenses before committing their main force.
+  This makes the Society an active participant in sector politics
+  rather than just an arena operator.
+
+============================================================
+
+Version 1.5.0 (Balance + Bugfixes + UX):
+- UX: Reward notifications now appear as proper intel messages in the bottom-left panel
+  - Credits, blueprints, ships, weapons, and fighter wings all show as intel entries
+  - Replaces the old plain chat messages for all reward types across all game modes
+- UX: Bounty display now shows color-coded difficulty label (Easy/Medium/Hard/Extreme)
+- CONTENT: Added 5 new bounty missions covering previously missing factions
+  - "Iron Faith" (Brother Kael) - Luddic Path zealot, fast and reckless
+  - "Diktat Enforcer" (Commander Voss) - Sindrian Diktat officer, steady and powerful
+  - "Persean Champion" (Mira Solenne) - Persean League commander, aggressive cruiser
+  - "Remnant Watcher" - Remnant patrol redirected to the arena (requires Derelict)
+  - "Ludd's Minister" (Minister Aldric) - Luddic Church pragmatist, cautious carrier
+- CONTENT: Difficulty tiers added to all existing bounty missions
+- CONTENT: Endless Battle rewards now cover every round up to 100 (was sparse after round 20)
+  - Added rewards for rounds 4, 17, 19, 21-24, 26-29, 31-34, 40, 45, 55, 65, 80, 100
+- CONTENT: Faction pool for Endless/Fleet Battles expanded
+  - Added: Remnant, Luddic Path, Luddic Church, Sindrian Diktat, Lions Guard
+- POLISH: Fixed text errors across multiple bounty missions
+  - MrBadaboum2: grammar fix ("have remade" -> "has remade")
+  - RandomGuys2: punctuation and capitalization fix
+  - Remnant: "for have kill" -> "for killing"
+  - LasherEpidemic: "searches to entertain" -> "seeks to entertain"
+  - Derelict2: removed duplicate word "of of"
+- CONTENT: Added 3 new vanilla bounty missions (no mod dependencies required)
+  - "The Pack Leader" (Grak Bonecrusher) - pirate swarm fighter, unlocks after GotAProblem
+  - "Iron Wall" (Varro Ironwall) - retired Hegemony commander, slow but devastating
+  - "Phase Ghost" (Syla Vex) - Tri-Tachyon phase specialist, fast and unpredictable
+- CONTENT: Added 6 new Endless Battle rewards for previously empty rounds
+  - Round 6: 3x Broadsword wings
+  - Round 7: 4x Light Autocannons
+  - Round 8: 2x Hypervelocity Drivers
+  - Round 16: Hammerhead blueprint
+  - Round 25: Eagle Cruiser blueprint
+  - Round 30: GladiatorSociety Samurai ship
+- BALANCING: Fixed reward scaling being completely out of proportion with fleet strength
+  - Endless Battle: Credit formula changed from quadratic (3.0*power²+power*800) to linear (power*150+5000)
+    - Round 10 reward: was ~270k credits, now ~34k credits
+    - Round 20 reward: was ~1.93M credits, now ~107k credits
+  - Fleet Battles: Same fix applied (linear formula * 0.75 for ally support discount)
+  - Blueprint reward interval now scales with round: every 3 rounds (r1-9), every 5 (r10-29), every 8 (r30+)
+- BUGFIX: Fixed Personality HullMods never working correctly (wrong PREFIX "autonomous_personality_" -> "GladiatorSociety_")
+- BUGFIX: Fixed MISSIONBOUNTY and ENDLESSBATTLE constants being swapped in GladiatorSociety_Constants
+- BUGFIX: Removed duplicate Commodities import in BlueprintRewardSystem
+- BUGFIX: FleetBattleContent.shipRewardTaken was final, causing potential save/load issues
+  - Added readResolve() to guard against null after deserialization
+- IMPROVEMENT: Added missing XStream aliases for BountyData, DataShip, EndlessReward dataclasses
+- IMPROVEMENT: Added gladiatorsociety.version file for Version Checker mod support
+- IMPROVEMENT: FactionDiscoveryConfig no longer loaded on every fleet creation
+- POLISH: Fixed several text typos ("Comparaison" -> "Comparison", "Ennemi" -> "Enemy", "have be accepted" -> "has been accepted")
+- POLISH: Fixed gender inconsistency in GotAProblem mission description
+
+
 - BALANCING: Significantly nerfed reward scaling in both Endless and Fleet Battle modes
   - Endless Battle: Power scaling reduced from 10%+10 to 7%+5 (under 400), and from 5% to 3.5% (over 400)
   - Endless Battle: Power multiplier reduced from 1.5x to 1.3x

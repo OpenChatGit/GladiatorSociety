@@ -1,0 +1,10 @@
+{
+    "faction":"remnant",
+    "randomFleet":true,
+    "dsrandom":1,
+    "reward":200000,
+    "needBounty":"Derelict",
+    "combatPoints":150,
+    "description":"A Remnant patrol that wandered too close to a Gladiator Society relay. The Society, ever opportunistic, has redirected it toward the arena. It does not know it is being watched. It does not care.",
+    "dialog":"THREAT DETECTED. ENGAGING."
+}

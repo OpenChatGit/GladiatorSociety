@@ -1,0 +1,17 @@
+{
+    "faction":"sindrian_diktat",
+    "firstname":"Commander",
+    "lastname":"Voss",
+    "gender":"M",
+    "officerlevel":-1,
+    "officerPersonality":"steady",
+    "mainShip":"eradicator_Assault",
+    "advships":[["enforcer_Assault",3,"steady"],["hammerhead_Balanced",2,"steady"]],
+    "randomFleet":false,
+    "dsrandom":1,
+    "reward":120000,
+    "difficulty":"Medium",
+    "description":"Commander Voss serves the Diktat with absolute loyalty. He entered the Gladiator Society on direct orders from the High Hegemon to demonstrate Sindrian military superiority.",
+    "dialog":"The Diktat does not lose. Neither do I.",
+    "avatar":"graphics/portraits/portrait_diktat01.png"
+}

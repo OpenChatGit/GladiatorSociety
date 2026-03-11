@@ -329,6 +329,10 @@ public class GladiatorSociety_JSONBountyRead {
         }
         bounty.needBounty = settings.optString("needBounty", null);
 
+        // Optional difficulty label
+        String diff = settings.optString("difficulty", "");
+        bounty.difficulty = diff.isEmpty() ? null : diff;
+
         bounty.dsrandom = settings.optInt("dsrandom", 1);
         if (!(bounty.dsrandom > -1 && bounty.dsrandom < 3)) {
             bounty.dsrandom = 1;

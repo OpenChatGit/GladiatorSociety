@@ -10,9 +10,10 @@
     "advships":[["GladiatorSociety_gryphon_xiv_badaboum",4,"reckless","swp_gryphon_xiv"],["GladiatorSociety_archer_badaboum",14,"reckless","swp_archer"]],
     "randomFleet":false, # If random fleet(from the faction) will be added.
     "dsrandom":1,
-    "reward":150000, # Bounty reward.
+    "reward":150000,
+    "difficulty":"Hard",
     "needBounty":"MrBadaboum",
-    "description":"Bim Boom have remade a new fleet, with more power, are you ready to fight her?",
+    "description":"Bim Boom has remade her fleet with more power. Are you ready to fight her?",
     "dialog":"This time, can you explode?",
 
     "avatar":"graphics/portraits/portrait14.png", # Portrait of the Gladiator

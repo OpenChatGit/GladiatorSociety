@@ -1,6 +1,7 @@
 {
   "whitelist": [
-    "hegemony", "tritachyon", "persean", "independent", "pirates"
+    "hegemony", "tritachyon", "persean", "independent", "pirates",
+    "remnant", "luddic_path", "luddic_church", "sindrian_diktat", "lions_guard"
   ],
   "blacklist": [
     "player", "neutral"

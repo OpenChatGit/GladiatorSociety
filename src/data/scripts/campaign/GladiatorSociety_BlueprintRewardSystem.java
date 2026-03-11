@@ -3,9 +3,7 @@ package src.data.scripts.campaign;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.SpecialItemData;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,12 +38,15 @@ public class GladiatorSociety_BlueprintRewardSystem {
     }
     
     /**
-     * Checks if the player should receive a blueprint reward
-     * @param currentRound Current round
-     * @return true if a blueprint should be awarded
+     * Checks if the player should receive a blueprint reward this round.
+     * Interval scales with round number to avoid flooding the player late-game:
+     * rounds 1-9: every 3 rounds, rounds 10-29: every 5 rounds, round 30+: every 8 rounds
      */
     public static boolean shouldGiveBlueprintReward(int currentRound) {
-        return currentRound > 0 && currentRound % 3 == 0;
+        if (currentRound <= 0) return false;
+        if (currentRound < 10) return currentRound % 3 == 0;
+        if (currentRound < 30) return currentRound % 5 == 0;
+        return currentRound % 8 == 0;
     }
     
     /**
@@ -331,48 +332,28 @@ public class GladiatorSociety_BlueprintRewardSystem {
             case BLUEPRINT:
                 SpecialItemData blueprintData = new SpecialItemData(reward.blueprintType, reward.resourceId);
                 playerCargo.addSpecial(blueprintData, 1);
-                
-                Global.getSector().getCampaignUI().addMessage(
-                    "Blueprint Reward: " + reward.description,
-                    Global.getSettings().getColor("textFriendColor")
-                );
+                GladiatorSociety_RewardIntel.notifyBlueprint(reward.description);
                 break;
                 
             case SHIP:
                 playerCargo.addFighters(reward.resourceId, reward.quantity);
-                
-                Global.getSector().getCampaignUI().addMessage(
-                    "Ship Reward: " + reward.description,
-                    Global.getSettings().getColor("textFriendColor")
-                );
+                GladiatorSociety_RewardIntel.notifyShip(reward.description);
                 break;
                 
             case FIGHTER:
                 playerCargo.addFighters(reward.resourceId, reward.quantity);
-                
-                Global.getSector().getCampaignUI().addMessage(
-                    "Fighter Wing Reward: " + reward.description,
-                    Global.getSettings().getColor("textFriendColor")
-                );
+                GladiatorSociety_RewardIntel.notifyItem("Fighter Wing Reward: ", reward.description);
                 break;
                 
             case WEAPON:
                 playerCargo.addWeapons(reward.resourceId, reward.quantity);
-                
-                Global.getSector().getCampaignUI().addMessage(
-                    "Weapon Reward: " + reward.description,
-                    Global.getSettings().getColor("textFriendColor")
-                );
+                GladiatorSociety_RewardIntel.notifyItem("Weapon Reward: ", reward.description);
                 break;
                 
             case HULLMOD:
                 SpecialItemData hullmodData = new SpecialItemData("modspec", reward.resourceId); // Use string directly
                 playerCargo.addSpecial(hullmodData, 1);
-                
-                Global.getSector().getCampaignUI().addMessage(
-                    "Hull Mod Reward: " + reward.description,
-                    Global.getSettings().getColor("textFriendColor")
-                );
+                GladiatorSociety_RewardIntel.notifyItem("Hull Mod Reward: ", reward.description);
                 break;
         }
         
@@ -421,11 +402,7 @@ public class GladiatorSociety_BlueprintRewardSystem {
         SpecialItemData blueprintData = new SpecialItemData(reward.blueprintType, reward.itemId);
         playerCargo.addSpecial(blueprintData, 1);
         
-        // Message to the player
-        Global.getSector().getCampaignUI().addMessage(
-            "Blueprint Reward: Received " + reward.name + "!",
-            Global.getSettings().getColor("textFriendColor")
-        );
+        GladiatorSociety_RewardIntel.notifyBlueprint(reward.name);
     }
     
     /**

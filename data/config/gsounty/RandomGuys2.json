@@ -10,10 +10,11 @@
 
     "randomFleet":true, # If random fleet(from the faction) will be added.
     "dsrandom":2,
-    "reward":140000, # Bounty reward.
+    "reward":140000,
+    "difficulty":"Medium",
     "combatPoints":60,
     "needBounty":"RandomGuys",
     "description":"The Gladiators in this match are so annoying that your opponent doesn't have a name",
-    "dialog":"I am better than Kiwi, this is all i have to say.",
+    "dialog":"I am better than Kiwi. This is all I have to say.",
     "avatar":"graphics/portraits/portrait21.png", # Portrait of the Gladiator
 }

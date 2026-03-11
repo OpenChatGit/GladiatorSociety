@@ -1,0 +1,17 @@
+{
+    "faction":"luddic_path",
+    "firstname":"Brother",
+    "lastname":"Kael",
+    "gender":"M",
+    "officerlevel":-1,
+    "officerPersonality":"reckless",
+    "mainShip":"lasher_luddic_path_Raider",
+    "advships":[["lasher_luddic_path_Raider",8,"reckless"],["kite_Standard",6,"reckless"]],
+    "randomFleet":false,
+    "dsrandom":1,
+    "reward":75000,
+    "difficulty":"Easy",
+    "description":"Brother Kael preaches that the machine is the enemy, yet fights in one. The contradiction does not bother him. Winning does.",
+    "dialog":"Ludd guides my hand. Your circuits will burn.",
+    "avatar":"graphics/portraits/portrait_luddic_path01.png"
+}

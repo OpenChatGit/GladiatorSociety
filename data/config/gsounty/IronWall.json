@@ -1,0 +1,17 @@
+{
+    "faction":"hegemony",
+    "firstname":"Varro",
+    "lastname":"Ironwall",
+    "gender":"M",
+    "officerlevel":-1,
+    "officerPersonality":"steady",
+    "mainShip":"onslaught_Standard",
+    "advships":[["enforcer_Assault",4,"steady"],["hammerhead_Balanced",3,"steady"]],
+    "randomFleet":false,
+    "dsrandom":1,
+    "reward":180000,
+    "difficulty":"Hard",
+    "description":"Varro Ironwall is a retired Hegemony fleet commander who now fights for sport. He favors overwhelming firepower and refuses to retreat. His fleet is slow, but hits like a freight train.",
+    "dialog":"I have held the line against worse than you. Take your best shot.",
+    "avatar":"graphics/portraits/portrait_hegemony06.png"
+}

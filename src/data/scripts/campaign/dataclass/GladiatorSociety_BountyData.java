@@ -19,6 +19,7 @@ public class GladiatorSociety_BountyData {
     public int fleetPoints;
     public int dsrandom;
     public List<GladiatorSociety_DataShip> advships;
+    public String difficulty; // "Easy", "Medium", "Hard", "Extreme" - optional, shown in bounty display
     
     
     

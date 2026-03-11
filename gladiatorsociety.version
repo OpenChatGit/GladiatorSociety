@@ -1,15 +1,13 @@
 {
-    "changelogURL":"https://raw.githubusercontent.com/OpenChatGit/GladiatorSociety/refs/tags/1.4.1/changelogs.txt",
-    "masterVersionFile":"https://raw.githubusercontent.com/OpenChatGit/GladiatorSociety/main/gladiatorsociety.version",
-    "modName":"Gladiator Society",
-    "modThreadId":33586,
-    "modVersion":
-    {
-        "major":1,
-        "minor":4,
-        "patch":1
+    "masterVersionFile": "https://raw.githubusercontent.com/NicoBBQ/GladiatorSociety/master/gladiatorsociety.version",
+    "modName": "Gladiator Society",
+    "modThreadId": 33586,
+    "modVersion": {
+        "major": 1,
+        "minor": 5,
+        "patch": 0
     },
-    "modVersionString":"1.4.1",
-    "starsectorVersion":"0.98a",
-    "directDownloadURL":"https://github.com/OpenChatGit/GladiatorSociety/releases/download/1.4.1/GladiatorSociety-1.4.1.zip"
+    "starsectorVersion": "0.98a",
+    "directDownloadURL": "https://github.com/NicoBBQ/GladiatorSociety/releases/latest/download/GladiatorSociety.zip",
+    "changelogURL": "https://raw.githubusercontent.com/NicoBBQ/GladiatorSociety/master/changelogs.txt"
 }

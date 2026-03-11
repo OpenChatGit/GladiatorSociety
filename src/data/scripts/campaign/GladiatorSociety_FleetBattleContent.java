@@ -5,6 +5,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
+import src.data.scripts.campaign.GladiatorSociety_RewardIntel;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,13 +19,20 @@ public class GladiatorSociety_FleetBattleContent {
     private int enemyPower;
     private String nextEnemyFaction;
     private String nextAllyFaction;
-    private final Set<String> shipRewardTaken = new HashSet<>();
+    private Set<String> shipRewardTaken = new HashSet<>();
 
     public GladiatorSociety_FleetBattleContent() {
         this.round = 0;
         this.allyPower = 10;
         this.enemyPower = 12;
         pickNextFactions();
+    }
+
+    protected Object readResolve() {
+        if (shipRewardTaken == null) {
+            shipRewardTaken = new HashSet<>();
+        }
+        return this;
     }
 
     public int getRound() { return round; }
@@ -55,12 +63,12 @@ public class GladiatorSociety_FleetBattleContent {
 
     /**
      * Calculates the credit reward based on enemy power this round.
-     * NERFED: Reduced to match Endless nerf (3.0 coefficient instead of 4.5)
+     * Linear formula matching Endless but reduced by 25% since you have an ally.
+     * Formula: (enemyPower * 150 + 5000) * 0.75
      */
     public int getCreditReward() {
-        int p = getEnemyPower();
-        // Slightly lower than Endless to reflect that you have an ally
-        return (int) (((3.0 * Math.pow(p, 2)) + p * 800) * 0.75f);
+        int p = enemyPower; // use raw power, not the multiplied display value
+        return (int) ((p * 150 + 5000) * 0.75f);
     }
 
     private void ensureFactionExists() {
@@ -182,10 +190,7 @@ public class GladiatorSociety_FleetBattleContent {
             FleetMemberAPI ship = Global.getFactory().createFleetMember(FleetMemberType.SHIP, variantId);
             Global.getSector().getPlayerFleet().getFleetData().addFleetMember(ship);
             shipRewardTaken.add(chosen.getHullSpec().getHullId());
-
-            Global.getSector().getCampaignUI().addMessage(
-                    "Ship Reward: " + chosen.getHullSpec().getHullNameWithDashClass(),
-                    Global.getSettings().getColor("textFriendColor"));
+            GladiatorSociety_RewardIntel.notifyShip(chosen.getHullSpec().getHullNameWithDashClass());
             return true;
         } catch (Throwable t) {
             Global.getLogger(GladiatorSociety_FleetBattleContent.class).error("Failed to award ship from enemy seed", t);
