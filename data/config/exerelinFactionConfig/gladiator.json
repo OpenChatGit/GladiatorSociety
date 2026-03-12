@@ -1,6 +1,102 @@
 {
-    "playableFaction":false,
+    # Gladiator Society - Nexerelin faction config
+    # Hegemony-origin mercenary corps, playable in Nexerelin game setup
+
+    "playableFaction":true,
     "corvusCompatible":true,
-    "noSyncRelations":true,
-"noRandomizeRelations":true,
+
+    "rebelFleetSuffix":"Deserters",
+
+    "marketSpawnWeight":1,
+
+    # GS starts friendly with Hegemony/Lions Guard, neutral to most, hostile to pirates/Luddic Path
+    "startRelationships":{
+        "hegemony":0.4,
+        "lions_guard":0.5,
+        "tritachyon":-0.3,
+        "persean":-0.2,
+        "luddic_path":-0.8,
+        "pirates":-0.6,
+        "remnant":-0.8,
+    },
+    "maxRelationships":{
+        "remnant":-0.51,
+        "luddic_path":-0.51,
+    },
+
+    # Mercenary corps - militarist, hierarchical, not very diplomatic
+    "alignments":{
+        "technocratic":-0.2,
+        "hierarchical":0.8,
+        "militarist":1.0,
+        "diplomatic":-0.5,
+        "ideological":-0.5,
+    },
+
+    "diplomacyTraits":["stalwart", "aggressive", "mercenary", "law_and_order"],
+
+    "morality":"neutral",
+
+    "isPirateNeutral":false,
+
+    "colonyExpeditionChance":0.3,
+
+    "groundBattleSettings":{
+        "moraleDamageTakenMult":0.85,
+    },
+
+    # Start ships use vanilla Hegemony-style hulls (GS uses Hegemony tech)
+    "startShipsSolo":[
+        ["lasher_Standard"],
+        ["wolf_Standard"],
+    ],
+
+    "startShipsCombatSmall":[
+        ["enforcer_Balanced", "lasher_CS", "wolf_Standard"],
+        ["centurion_Assault", "lasher_Standard", "hound_Standard"],
+    ],
+
+    "startShipsCombatLarge":[
+        ["eagle_Assault", "enforcer_Escort", "lasher_Strike"],
+        ["dominator_Assault", "enforcer_Balanced", "wolf_Standard"],
+    ],
+
+    "startShipsTradeSmall":[
+        ["mule_Standard", "hound_Standard", "kite_Standard"],
+    ],
+
+    "startShipsTradeLarge":[
+        ["colossus_Standard", "mule_Standard", "hound_Standard"],
+    ],
+
+    "startShipsCarrierSmall":[
+        ["condor_Attack", "lasher_Standard", "wolf_Standard"],
+    ],
+
+    "startShipsCarrierLarge":[
+        ["mora_Assault", "enforcer_Escort", "lasher_Strike"],
+    ],
+
+    "startSpecialItems":[
+        [["low_tech_package", ""]],
+    ],
+
+    # GS uses standard vanilla stations (Hegemony-style)
+    "defenceStations":[
+        {"ids":["orbitalstation", "battlestation", "starfortress"]},
+        {"ids":["orbitalstation_mid", "battlestation_mid", "starfortress_mid"], "weight":0.5},
+    ],
+
+    "industrySeeds":[
+        {"id":"militarybase", "mult":0.4},
+        {"id":"grounddefenses", "mult":0.3},
+        {"id":"heavyindustry", "mult":0.2},
+        {"id":"fuelprod", "mult":0.1},
+    ],
+
+    "bonusSeeds":[
+        {"id":"population_upsize", "count":1},
+        {"id":"nanoforge_corrupted", "count":1},
+        {"id":"aiCore_military", "mult":0.3},
+    ],
 }

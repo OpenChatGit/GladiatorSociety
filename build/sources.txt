@@ -11,11 +11,14 @@ C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\Gladi
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\GladiatorSociety_FleetBattleContent.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\GladiatorSociety_JSONBountyRead.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\GladiatorSociety_RewardIntel.java
+C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\GladiatorSociety_SalvagePit.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\GladiatorSociety_TinyFleetFactoryV2.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\dataclass\GladiatorSociety_BountyData.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\dataclass\GladiatorSociety_DataShip.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\dataclass\GladiatorSociety_EndlessReward.java
+C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\intel\GladiatorSociety_InitQuest.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\world\GladiatorSociety_ModPlugin.java
+C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\world\GladiatorSociety_WorldGen.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\shipsystems\scripts\GladiatorSociety_BurnDriveStats.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\shipsystems\scripts\GladiatorSociety_BushidoStats.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\utils\GladiatorSociety_Constants.java
@@ -23,4 +26,5 @@ C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\utils\GladiatorSociety
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\com\fs\starfarer\api\impl\campaign\rulecmd\GladiatorSociety_GladiatorAvailable.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\com\fs\starfarer\api\impl\campaign\rulecmd\GladiatorSociety_GladiatorEndless.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\com\fs\starfarer\api\impl\campaign\rulecmd\GladiatorSociety_GladiatorFleetBattles.java
+C:\Users\Nicol\Documents\GitHub\GladiatorSociety\com\fs\starfarer\api\impl\campaign\rulecmd\GladiatorSociety_SalvagePitCMD.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\com\fs\starfarer\api\impl\campaign\rulecmd\GladiatorSociety_ShowDefaultVisual.java

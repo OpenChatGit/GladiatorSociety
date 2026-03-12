@@ -1,0 +1,38 @@
+{
+	"starSystem":"gs_arena_system",
+	"markets":[
+		{
+			"entities":["gs_gladius_prime"],
+			"faction":"gladiator",
+			"size":7,
+			"freePort":false,
+
+			"startingConditions":[
+				"population_7",
+				"habitable",
+				"mild_climate",
+				"farmland_adequate",
+				"ore_moderate",
+				"volatiles_trace",
+				"organics_trace",
+			],
+
+			"industries":[
+				"population",
+				"spaceport",
+				"highcommand",
+				"militarybase",
+				"grounddefenses",
+				"heavyindustry",
+				"farming",
+			],
+
+			"submarkets":[
+				"open_market",
+				"storage",
+				"generic_military",
+				"black_market",
+			],
+		},
+	],
+}

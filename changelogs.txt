@@ -1,22 +1,76 @@
 ============================================================
-COMING IN 1.6.0 - PLANNED BIG CHANGES
+Version 1.6.0 (The Arena Update):
 ============================================================
 
-ARENA SYSTEM OVERHAUL
-  The Gladiator Society will no longer be accessible via comm relay.
-  Instead, you will need to travel to a planet that has an Arena
-  structure built on it. Arenas can appear on existing colony planets,
-  or you can construct one yourself on your own colony.
-  This makes the Society feel like a real place in the world rather
-  than a floating menu.
+!! REQUIRES A NEW GAME - NOT SAVE COMPATIBLE !!
 
-GLADIATOR MERCENARY FACTION
-  A proper Gladiator Society faction will be added to the game world.
-  When a faction at war is about to send a fleet, there is a chance
-  they first dispatch a Gladiator fleet as a vanguard - to soften up
-  the target and test their defenses before committing their main force.
-  This makes the Society an active participant in sector politics
-  rather than just an arena operator.
+NEW: Gladiator Society Faction
+- The Gladiator Society is now a real faction in the sector
+- Hegemony-origin lore: officially founded as a Hegemony security corps,
+  evolved into an independent mercenary organization - still works primarily
+  for the Hegemony but takes contracts from any faction willing to pay
+- Uses Hegemony-derived tech (ships, weapons, blueprints)
+- Appears in the Intel tab, Factions screen, and simulator like all other factions
+- Fully integrated with Nexerelin: playable in game setup, participates in
+  diplomacy, wars, colony expeditions, and all faction mechanics
+- New faction logo: banner and crest
+- Faction relationships: Favorable with Hegemony/Lions Guard, Hostile to Pirates/Remnants/Luddic Path
+
+NEW: The Arena System
+- New star system "The Arena" spawns at a fixed location in the sector
+- Capital: Gladius Prime - terran planet, size 7, heavily militarized
+  - Spaceport, Military Base, Ground Defenses, Heavy Industry, Farming
+  - Open, storage, military, and black market submarkets
+  - Commander Marcus Varro stationed here as quest contact
+  - Planet description added
+- The Arena station orbits Gladius Prime
+  (all existing arena modes: Bounty, Endless Battle, Fleet Battles still accessible here)
+- Comm Relay and Nav Buoy added to the system
+- Two additional uninhabited planets with moons each (Ferrum, Scoria)
+- Permanent GS Defense Force patrol fleet guards the system
+
+NEW: Initiation Quest
+- New quest "Gladiator Society: Initiation" unlocks the Salvage Pit
+- Triggered by visiting Gladius Prime or The Arena station and speaking with Commander Varro
+- Objective: destroy a Remnant patrol fleet in the system (scales to player fleet strength)
+- Reward: credits, reputation boost, and permanent Salvage Pit access
+- Quest tracked in the Intel tab with map marker
+
+NEW: Salvage Pit
+- Accessible via The Arena comm relay after completing the initiation quest
+- Locked behind quest completion - shown as "[Locked] Salvage Pit" until unlocked
+- Entry spawns a real Gate (with proper gate visuals) 400 units from the comm relay
+- Uses hyperspace jump animation for immersive transition
+- Entry gate removed after jumping in
+- Procedurally generated system with:
+  - 2-4 planets
+  - 1-2 mining stations (always present)
+  - 30% chance of research station
+  - 40% chance of hab centers
+  - Remnant fleets scaled to player fleet points (40-60%, clamped 40-250 FP), 3-5 fleets
+  - Remnant Nexus battlestation
+  - Navigation buoys and comm relays as objectives
+  - 40% chance of rare derelict specials
+  - Full salvage cache pool
+
+HOTFIX 1.6.0a:
+- BUGFIX: Fixed RingBand NaN crash on save - changed star type from ORANGE_GIANT to YELLOW
+- BUGFIX: Fixed Gladius Prime showing "No description... yet" - corrected description type in descriptions.csv
+- ADDED: Comm Relay and Nav Buoy added to The Arena system
+
+HOTFIX 1.6.0b:
+- CHANGED: Arena menu moved from comm relay to The Arena station directly
+- CHANGED: Salvage Pit is now always available from the Arena station menu (no quest required)
+- BUGFIX: Fixed GS fleet interactions forcing combat even when friendly/neutral
+- BUGFIX: Fixed "gladiatorComRelay" error in Bounty Directory back button
+- BUGFIX: Fixed Bounty Directory opening automatically instead of on click
+- BUGFIX: Fixed GS Defense Force patrol joining arena battles as enemy
+  - Arena enemy fleet now uses neutral faction instead of gladiator faction
+  - Patrol fleet marked as non-hostile and non-aggressive
+- BUGFIX: Fixed GS patrol fleet attacking player despite friendly/neutral relations
+- BUGFIX: Fixed Back button in Endless Battle and Fleet Battles causing error/dialog close
+- IMPROVED: Salvage Pit entry gate now spawns in orbit around Gladius Prime
+- NOTE: Initiation Quest (Commander Varro contract) postponed to version 1.6.2
 
 ============================================================
 

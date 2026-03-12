@@ -86,7 +86,7 @@ public class GladiatorSociety_GladiatorFleetBattles extends BaseCommandPlugin {
             opts.setShortcut("DevIncFleetBattle", Keyboard.KEY_J, false, false, false, false);
         }
 
-        String exitOpt = "gladiatorComRelay";
+        String exitOpt = "gs_fleetBack";
         opts.addOption(Misc.ucFirst("back"), exitOpt);
         opts.setShortcut(exitOpt, Keyboard.KEY_ESCAPE, false, false, false, false);
     }
@@ -270,7 +270,8 @@ public class GladiatorSociety_GladiatorFleetBattles extends BaseCommandPlugin {
                 FleetFactoryV3.addCommanderSkills(person, fleet, null);
                 Misc.makeImportant(fleet, GladiatorSociety_Constants.GSFACTION_ID, 120);
                 fleet.setNoFactionInName(true);
-                fleet.setFaction(GladiatorSociety_Constants.GSFACTION_ID, true);
+                // Use neutral faction so GS patrol fleets don't join as enemy
+                fleet.setFaction("neutral", true);
                 fleet.setName("Gladiator enemy fleet");
                 fleet.getAI().addAssignment(FleetAssignment.INTERCEPT, Global.getSector().getPlayerFleet(), 1000000f, null);
                 fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_MAKE_AGGRESSIVE, true);

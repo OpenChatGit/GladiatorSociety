@@ -131,7 +131,7 @@ public class GladiatorSociety_GladiatorAvailable extends BaseCommandPlugin {
         /*  if (content.getMaxConcurrent() <= content.missions.size()) {
                     opts.setEnabled("gladiator_Next", false);
         }*/
-        String exitOpt = "gladiatorComRelay";
+        String exitOpt = "gs_dirBack";
 
         opts.addOption(Misc.ucFirst("back"), exitOpt);
         opts.setShortcut(exitOpt, Keyboard.KEY_ESCAPE,

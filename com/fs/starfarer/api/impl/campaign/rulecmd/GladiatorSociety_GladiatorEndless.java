@@ -149,7 +149,7 @@ public class GladiatorSociety_GladiatorEndless extends BaseCommandPlugin {
                     false, false, false, false);
         }
 
-        String exitOpt = "gladiatorComRelay";
+        String exitOpt = "gs_endlessBack";
         opts.addOption(Misc.ucFirst("back"), exitOpt);
         opts.setShortcut(exitOpt, Keyboard.KEY_ESCAPE,
                 false, false, false, false);

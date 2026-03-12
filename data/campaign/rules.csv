@@ -1,30 +1,27 @@
 id,trigger,conditions,script,text,options,notes
-greetingGS,OpenCommLink,$faction.id == gladiator score:100,$entity.ignorePlayerCommRequests = true 1,$dialog,cutCommLink:Cut the comm link,
-encounterGS,BeginFleetEncounter,$faction.id == gladiator score:100,"AddText ""You're being hailed by $personName."" $faction.baseColor
-MakeOtherFleetPreventDisengage tOff true
+encounterGS,BeginFleetEncounter,"$faction.id == gladiator score:100
+$faction.hostileToPlayer","MakeOtherFleetPreventDisengage tOff true
 MakeOtherFleetAggressive tOff true",,,
 ,,,,,,
-GladiatorComRelayAddOptions,COB_AddOptions,"$tag:comm_relay
-!$hasMarket","SetShortcut gladiatorComRelay ""G"" true",,90:gladiatorComRelay:Gladiator Society,
-GladiatorComRelayOptions,DialogOptionSelected,"$option == gladiatorComRelay
-$tag:comm_relay
-!$hasMarket","$menuState = gladiatorSpecial
-FireAll GladiatorComRelayInitialize
-FireAll GladiatorComRelay","Welcome to the Gladiator Society.
-Pull up a chair, take a fight, and claim your rewards.
-
-The third part is only available if you win.",,
-GladiatorComRelayLeaveOption,GladiatorComRelay,,"SetShortcut gladiatorComRelayBack ""ESCAPE""",,30:gladiatorComRelayBack:Back,
-GladiatorComRelayBack,DialogOptionSelected,"$option == gladiatorComRelayBack
-$tag:comm_relay
-!$hasMarket","GladiatorSociety_ShowDefaultVisual
-$menuState = main 0
-FireAll COB_AddOptions",,,
+# ── Arena Station - main interaction ─────────────────────────────────────────
+gs_ArenaOpenStation,OpenInteractionDialog,"$id == gs_arena_station score:1000","ShowDefaultVisual
+FireAll GladiatorArenaMain",,,
+GladiatorArenaMain,GladiatorArenaMain,,,"Welcome to the Gladiator Society.
+Pull up a chair, take a fight, and claim your rewards.","10:gladiatorDirectoryMain:Bounty Directory
+20:gladiatorEndlessBattle:Endless Battle
+20:gladiatorFleetBattles:Fleet Battles
+30:gladiatorSalvagePit:Salvage Pit
+5:gladiatorVarro:Speak with Commander Varro
+100:gs_arena_leave:Leave",
 ,,,,,,
-# Gladiator Bounty directory,,,,,,
-gladiator_DirectoryOption,GladiatorComRelay,,SetShortcut gladiatorDirectoryMain G,,10:gladiatorDirectoryMain:Bounty directory,
+gs_ArenaLeaveStation,DialogOptionSelected,$option == gs_arena_leave,DismissDialog,,,
+,,,,,,
+# ── Bounty Directory ──────────────────────────────────────────────────────────
 gladiator_Directory,DialogOptionSelected,$option == gladiatorDirectoryMain,FireAll GladiatorDirectory,,,
 gladiator_DirectoryByTrigger,GladiatorDirectory,,GladiatorSociety_GladiatorAvailable bountyAvailable,Which bounty do you want to look up?,,
+gladiator_DirectoryBack,GladiatorDirectory,,"SetShortcut gs_dirBack ESCAPE",,90:gs_dirBack:Back,
+gladiator_DirectoryBackSel,DialogOptionSelected,$option == gs_dirBack,"$menuState = main 0
+FireAll GladiatorArenaMain",,,
 ,,,,,,
 gladiator_Bounty0,DialogOptionSelected,$option == gladiator_Bounty0,GladiatorSociety_GladiatorAvailable bountyDisplay 0,,,
 gladiator_Bounty1,DialogOptionSelected,$option == gladiator_Bounty1,GladiatorSociety_GladiatorAvailable bountyDisplay 1,,,
@@ -35,17 +32,42 @@ gladiator_Accept0,DialogOptionSelected,$option == Accept0,GladiatorSociety_Gladi
 gladiator_Accept1,DialogOptionSelected,$option == Accept1,GladiatorSociety_GladiatorAvailable Accept 1,,,
 gladiator_Accept2,DialogOptionSelected,$option == Accept2,GladiatorSociety_GladiatorAvailable Accept 2,,,
 ,,,,,,
-,,,,,,
-# Gladiator Endless Battle,,,,,,
-gladiator_EndlessOption,GladiatorComRelay,,SetShortcut gladiatorEndlessBattle F,,20:gladiatorEndlessBattle:Endless Battle,
+# ── Endless Battle ────────────────────────────────────────────────────────────
 gladiator_Endless,DialogOptionSelected,$option == gladiatorEndlessBattle,FireAll GladiatorEndless,,,
 gladiator_EndlessByTrigger,GladiatorEndless,,GladiatorSociety_GladiatorEndless Display,"Endless Battle pits you against an ever-growing fleet. Every victory increases the power of the next enemy. Rewards are given automatically after each win.",,
+gladiator_EndlessBack,GladiatorEndless,,"SetShortcut gs_endlessBack ESCAPE",,90:gs_endlessBack:Back,
+gladiator_EndlessBackSel,DialogOptionSelected,$option == gs_endlessBack,"$menuState = main 0
+FireAll GladiatorArenaMain",,,
 gladiator_EndlessAccept,DialogOptionSelected,$option == AcceptEndless,GladiatorSociety_GladiatorEndless Accept,,,
 gladiator_EndlessIncrement,DialogOptionSelected,$option == DevIncEndless,GladiatorSociety_GladiatorEndless Increment,,,
 ,,,,,,
-# Gladiator Fleet Battles
-gladiator_FleetOption,GladiatorComRelay,,SetShortcut gladiatorFleetBattles H,,20:gladiatorFleetBattles:Fleet Battles,
+# ── Fleet Battles ─────────────────────────────────────────────────────────────
 gladiator_Fleet,DialogOptionSelected,$option == gladiatorFleetBattles,FireAll GladiatorFleetBattles,,,
 gladiator_FleetByTrigger,GladiatorFleetBattles,,GladiatorSociety_GladiatorFleetBattles Display,"Fight alongside an allied fleet against an ever-growing enemy. Each round increases both allied and enemy strength.",,
+gladiator_FleetBack,GladiatorFleetBattles,,"SetShortcut gs_fleetBack ESCAPE",,90:gs_fleetBack:Back,
+gladiator_FleetBackSel,DialogOptionSelected,$option == gs_fleetBack,"$menuState = main 0
+FireAll GladiatorArenaMain",,,
 gladiator_FleetAccept,DialogOptionSelected,$option == AcceptFleetBattle,GladiatorSociety_GladiatorFleetBattles Accept,,,
 gladiator_FleetIncrement,DialogOptionSelected,$option == DevIncFleetBattle,GladiatorSociety_GladiatorFleetBattles Increment,,,
+,,,,,,
+# ── Salvage Pit ───────────────────────────────────────────────────────────────
+gs_SalvagePit,DialogOptionSelected,$option == gladiatorSalvagePit,GladiatorSociety_SalvagePitCMD spawnPortal,"A Gate has been activated nearby. Fly to it to enter the Salvage Pit - a lawless debris field full of scavengers and abandoned cargo. Everything you find is yours to keep.",,
+,,,,,,
+# ── Salvage Pit Entry Gate ────────────────────────────────────────────────────
+gs_PitEntryOpen,OpenInteractionDialog,"$customType == gs_salvage_pit_entry score:1000","ShowDefaultVisual
+GladiatorSociety_SalvagePitCMD displayEntry",,,
+gs_PitEnterConfirm,DialogOptionSelected,$option == gs_pit_enter,GladiatorSociety_SalvagePitCMD enter,,,
+,,,,,,
+# ── Salvage Pit Exit Gate ─────────────────────────────────────────────────────
+gs_PitExitOpen,OpenInteractionDialog,"$customType == gs_salvage_pit_exit score:1000","ShowDefaultVisual
+GladiatorSociety_SalvagePitCMD displayExit",,,
+gs_PitExitConfirm,DialogOptionSelected,$option == gs_pit_exit_confirm,GladiatorSociety_SalvagePitCMD exit,,,
+gs_PitExitCancel,DialogOptionSelected,$option == gs_pit_exit_cancel,,,
+,,,,,,
+# ── Commander Varro / Quest Dialog ────────────────────────────────────────────
+gs_VarroDialog,DialogOptionSelected,$option == gladiatorVarro,FireAll gs_ArenaDialog,,,
+gs_ArenaOpen,OpenInteractionDialog,"$entity.id == gs_gladius_prime score:500","ShowDefaultVisual
+FireAll gs_ArenaDialog",,,
+gs_ArenaDialog,gs_ArenaDialog,,,,
+gs_ArenaIntro,gs_ArenaDialog,,"AddText ""Commander Varro nods. 'Welcome to the Gladiator Society. The arena is open - take a fight, earn your keep.'"" $faction.baseColor",,,
+gs_ArenaLeave,gs_ArenaDialog,,"SetShortcut defaultLeave ESCAPE",,30:defaultLeave:Leave,
