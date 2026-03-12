@@ -1,6 +1,5 @@
-============================================================
-Version 1.6.0 (The Arena Update):
-============================================================
+## Version 1.6.0 (The Arena Update):
+
 
 !! REQUIRES A NEW GAME - NOT SAVE COMPATIBLE !!
 
