@@ -28,7 +28,7 @@ NEW: The Arena System
 - Two additional uninhabited planets with moons each (Ferrum, Scoria)
 - Permanent GS Defense Force patrol fleet guards the system
 
-NEW: Initiation Quest
+NEW: Initiation Quest (```postponed to version 1.6.2```)
 - New quest "Gladiator Society: Initiation" unlocks the Salvage Pit
 - Triggered by visiting Gladius Prime or The Arena station and speaking with Commander Varro
 - Objective: destroy a Remnant patrol fleet in the system (scales to player fleet strength)
