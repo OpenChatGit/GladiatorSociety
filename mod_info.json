@@ -2,7 +2,7 @@
     "id": "gladiatorsociety",
     "name": "Gladiator Society",
     "author": "Author - Snrasha - Maintainer NicoBBQ",
-    "version": { "major": 1, "minor": 6, "patch": 0 },
+    "version": { "major": 1, "minor": 6, "patch": 1},
     "description": "Gladiator Society adds special mission bounties and an endless battle mode with progressive rewards.",
     "gameVersion": "0.98a",
     "modPlugin": "src.data.scripts.world.GladiatorSociety_ModPlugin",
