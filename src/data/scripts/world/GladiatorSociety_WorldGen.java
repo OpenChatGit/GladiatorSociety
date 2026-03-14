@@ -226,8 +226,7 @@ public class GladiatorSociety_WorldGen implements SectorGeneratorPlugin {
 
     private static void clearNebula(StarSystemAPI system) {
         try {
-            HyperspaceTerrainPlugin plugin =
-                    (HyperspaceTerrainPlugin) Misc.getHyperspaceTerrain().getPlugin();
+            HyperspaceTerrainPlugin plugin = Misc.getHyperspaceTerrainPlugin();
             NebulaEditor editor = new NebulaEditor(plugin);
             float minRadius = plugin.getTileSize() * 2f;
             float radius = system.getMaxRadiusInHyperspace();

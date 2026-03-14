@@ -303,7 +303,7 @@ public class GladiatorSociety_GladiatorEndless extends BaseCommandPlugin {
 
         fleet.setCommander(person);
         fleet.getFlagship().setCaptain(person);
-        FleetFactoryV3.addCommanderSkills(person, fleet, null);
+        FleetFactoryV3.addCommanderSkills(person, fleet, new java.util.Random());
 
         Misc.makeImportant(fleet, GladiatorSociety_Constants.GSFACTION_ID, 120);
      //   fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_PIRATE, true);

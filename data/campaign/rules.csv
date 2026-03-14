@@ -11,6 +11,7 @@ Pull up a chair, take a fight, and claim your rewards.","10:gladiatorDirectoryMa
 20:gladiatorEndlessBattle:Endless Battle
 20:gladiatorFleetBattles:Fleet Battles
 30:gladiatorSalvagePit:Salvage Pit
+35:gladiatorRedactedPit:[REDACTED]
 5:gladiatorVarro:Speak with Commander Varro
 100:gs_arena_leave:Leave",
 ,,,,,,
@@ -53,6 +54,9 @@ gladiator_FleetIncrement,DialogOptionSelected,$option == DevIncFleetBattle,Gladi
 # ── Salvage Pit ───────────────────────────────────────────────────────────────
 gs_SalvagePit,DialogOptionSelected,$option == gladiatorSalvagePit,GladiatorSociety_SalvagePitCMD spawnPortal,"A Gate has been activated nearby. Fly to it to enter the Salvage Pit - a lawless debris field full of scavengers and abandoned cargo. Everything you find is yours to keep.",,
 ,,,,,,
+# ── [REDACTED] Pit ────────────────────────────────────────────────────────────
+gs_RedactedPit,DialogOptionSelected,$option == gladiatorRedactedPit,GladiatorSociety_RedactedPitCMD spawnPortal,"A Gate has been activated nearby. Sensor readings beyond it are corrupted. Whatever is in there... it is not from this sector.",,
+,,,,,,
 # ── Salvage Pit Entry Gate ────────────────────────────────────────────────────
 gs_PitEntryOpen,OpenInteractionDialog,"$customType == gs_salvage_pit_entry score:1000","ShowDefaultVisual
 GladiatorSociety_SalvagePitCMD displayEntry",,,
@@ -63,6 +67,17 @@ gs_PitExitOpen,OpenInteractionDialog,"$customType == gs_salvage_pit_exit score:1
 GladiatorSociety_SalvagePitCMD displayExit",,,
 gs_PitExitConfirm,DialogOptionSelected,$option == gs_pit_exit_confirm,GladiatorSociety_SalvagePitCMD exit,,,
 gs_PitExitCancel,DialogOptionSelected,$option == gs_pit_exit_cancel,,,
+,,,,,,
+# ── [REDACTED] Pit Entry Gate ─────────────────────────────────────────────────
+gs_RedactedEntryOpen,OpenInteractionDialog,"$customType == gs_redacted_pit_entry score:1000","ShowDefaultVisual
+GladiatorSociety_RedactedPitCMD displayEntry",,,
+gs_RedactedEnterConfirm,DialogOptionSelected,$option == gs_redacted_enter,GladiatorSociety_RedactedPitCMD enter,,,
+,,,,,,
+# ── [REDACTED] Pit Exit Gate ──────────────────────────────────────────────────
+gs_RedactedExitOpen,OpenInteractionDialog,"$customType == gs_redacted_pit_exit score:1000","ShowDefaultVisual
+GladiatorSociety_RedactedPitCMD displayExit",,,
+gs_RedactedExitConfirm,DialogOptionSelected,$option == gs_redacted_exit_confirm,GladiatorSociety_RedactedPitCMD exit,,,
+gs_RedactedExitCancel,DialogOptionSelected,$option == gs_redacted_exit_cancel,,,
 ,,,,,,
 # ── Commander Varro / Quest Dialog ────────────────────────────────────────────
 gs_VarroDialog,DialogOptionSelected,$option == gladiatorVarro,FireAll gs_ArenaDialog,,,

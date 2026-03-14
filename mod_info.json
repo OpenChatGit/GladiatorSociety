@@ -1,21 +1,25 @@
 {
-  "id":"gladiatorsociety",
-  "name":"Gladiator Society",
-  "author":"Author - Snrasha - Maintainer NicoBBQ",
-  "version": "1.6.0",
-  "description":"Gladiator Society adds special mission bounties and an endless battle mode with progressive rewards.",
-  "gameVersion":"0.98a",
-  "modPlugin":"src.data.scripts.world.GladiatorSociety_ModPlugin",
-  "sectorGeneratorPlugin":"src.data.scripts.world.GladiatorSociety_WorldGen",
-  "jars":["jars/GladiatorSociety.jar"],
-  "dependencies": [
-    {
-      "id": "nexerelin",
-      "name": "Nexerelin"
-    },
-    {
-      "id": "lw_lazylib",
-      "name": "LazyLib"
-    }
-  ]
+    "id": "gladiatorsociety",
+    "name": "Gladiator Society",
+    "author": "Author - Snrasha - Maintainer NicoBBQ",
+    "version": { "major": 1, "minor": 6, "patch": 0 },
+    "description": "Gladiator Society adds special mission bounties and an endless battle mode with progressive rewards.",
+    "gameVersion": "0.98a",
+    "modPlugin": "src.data.scripts.world.GladiatorSociety_ModPlugin",
+    "sectorGeneratorPlugin": "src.data.scripts.world.GladiatorSociety_WorldGen",
+    "jars": ["jars/GladiatorSociety.jar"],
+    "dependencies": [
+        {
+            "id": "nexerelin",
+            "name": "Nexerelin"
+        },
+        {
+            "id": "lw_lazylib",
+            "name": "LazyLib"
+        },
+        {
+            "id": "assortment_of_things",
+            "name": "Random Assortment of Things"
+        }
+    ]
 }

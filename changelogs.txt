@@ -1,3 +1,52 @@
+## Version 1.6.1 (Pit Overhaul & Crash Fix):
+
+BUGFIX: Fixed fatal crash when salvaging inside the Salvage Pit or [REDACTED] Pit
+- Crash: "Cannot invoke String.startsWith(String) because getName() is null"
+- Root cause: vanilla theme generators spawn entities internally without setting a name,
+  causing vanilla salvage code to NPE on getName().startsWith()
+- Fix: after system generation, all entities with null names are patched to "Unknown"
+- Applies to both Salvage Pit and [REDACTED] Pit
+
+NEW: Salvage Pit - Full System Generation Overhaul
+- Star type is now randomized: Brown Dwarf, Red Dwarf, Red Giant, Red Supergiant,
+  White Dwarf, Orange, Orange Giant, Neutron Star, Black Hole
+- Multi-star systems: 60% single, 30% binary, 10% trinary
+- Planets now spawn correctly at proper orbital distances (no longer at star center)
+- Debris rings use the primary star as focus (no longer at system center)
+- Derelict ships, ship graveyards, caches, mining stations, research stations,
+  habitat centers, objectives, and a Remnant battlestation now spawn via theme generators
+- Remnant fleets scale to player fleet size
+- Exit gate placed at 6500u, safely outside all debris rings
+- Gate spawn UX fix: dialog now shows confirmation text instead of closing immediately
+
+NEW: [REDACTED] Pit - Full System Generation Overhaul (requires Random Assortment of Things)
+- RAT mod detection now uses official mod ID check (assortment_of_things)
+- Star type always dark/exotic: Neutron Star, Black Hole, or White Dwarf
+- Multi-star systems: 55% single, 30% binary, 15% trinary
+- Planets and debris rings now spawn at correct orbital positions
+- Abyssal fleets now built using rat_abyssals faction directly (correct ship pool)
+- RAT AI Cores assigned via AICoreOfficerPlugin.createPerson() - correct skills and portraits
+- Seraph-tagged ships always receive a Seraph Core
+- Chronos/Cosmos assignment based on variant ID, matching RAT's own logic
+- All abyssal behaviour flags applied (always hostile, always pursue, no jump)
+- Exit gate placed at 8000u
+- System now uses RAT's own Abyss backgrounds (Abyss1/Abyss2) and near-black light color
+- RAT Abyss entities spawn instead of vanilla content: Research Station, Fabricator(s),
+  Accumulator, Sensor Array, Beacon, Drones, Transmitters
+- Abyssal derelict ship wrecks (Merrow, Chuul, Makara, Aboleth, Morkoth variants) scattered in system
+- Vanilla caches and objectives removed - loot comes from RAT entities directly
+
+IMPROVED: Replaced deprecated/suboptimal API calls with current equivalents
+- Misc.getHyperspaceTerrain().getPlugin() -> Misc.getHyperspaceTerrainPlugin()
+- Global.getSector().removeStarSystem() -> removeStarSystemNextFrame() in SalvagePit for safer async cleanup
+- TinyFleetFactoryV2.addCommanderAndOfficers() -> FleetFactoryV3.addCommanderAndOfficersV2()
+- TinyFleetFactoryV2.createFleet(FleetParamsV3) -> delegates to FleetFactoryV3.createFleet()
+- addCommanderSkills(person, fleet, null) -> addCommanderSkills(person, fleet, new Random()) in all rulecmds
+IMPROVED: "modspec" hardstring replaced with GladiatorSociety_Constants.MODSPEC_ITEM_ID constant
+- Applied in BlueprintRewardSystem (4 occurrences) and EndlessContent (1 occurrence)
+
+============================================================
+
 ## Version 1.6.0 (The Arena Update):
 
 
@@ -51,6 +100,13 @@ NEW: Salvage Pit
   - Navigation buoys and comm relays as objectives
   - 40% chance of rare derelict specials
   - Full salvage cache pool
+
+BUGFIX: Fixed fatal crash when salvaging inside the Salvage Pit or [REDACTED] Pit
+- Crash: "Cannot invoke String.startsWith(String) because getName() is null"
+- Root cause: vanilla theme generators (DerelictThemeGenerator etc.) spawn debris fields
+  and other entities internally without setting a name, causing vanilla salvage code to NPE
+- Fix: after system generation, all entities with null names are patched to "Unknown"
+- Applies to both Salvage Pit and [REDACTED] Pit
 
 HOTFIX 1.6.0a:
 - BUGFIX: Fixed RingBand NaN crash on save - changed star type from ORANGE_GIANT to YELLOW

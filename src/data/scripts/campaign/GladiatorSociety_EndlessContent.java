@@ -5,6 +5,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import src.data.scripts.campaign.GladiatorSociety_FactionDiscoveryConfig;
 import src.data.scripts.campaign.GladiatorSociety_RewardIntel;
+import src.data.utils.GladiatorSociety_Constants;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -294,7 +295,7 @@ public class GladiatorSociety_EndlessContent {
                 case 5: // Hullmod
                     if (reward.blueprint) {
                         Global.getSector().getPlayerFleet().getCargo().addSpecial(
-                            new com.fs.starfarer.api.campaign.SpecialItemData("modspec", reward.id_Resource), 1);
+                            new com.fs.starfarer.api.campaign.SpecialItemData(GladiatorSociety_Constants.MODSPEC_ITEM_ID, reward.id_Resource), 1);
                     }
                     break;
                     

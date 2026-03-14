@@ -10,6 +10,7 @@ C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\Gladi
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\GladiatorSociety_FactionDiscoveryConfig.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\GladiatorSociety_FleetBattleContent.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\GladiatorSociety_JSONBountyRead.java
+C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\GladiatorSociety_RedactedPit.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\GladiatorSociety_RewardIntel.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\GladiatorSociety_SalvagePit.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\scripts\campaign\GladiatorSociety_TinyFleetFactoryV2.java
@@ -26,5 +27,6 @@ C:\Users\Nicol\Documents\GitHub\GladiatorSociety\src\data\utils\GladiatorSociety
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\com\fs\starfarer\api\impl\campaign\rulecmd\GladiatorSociety_GladiatorAvailable.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\com\fs\starfarer\api\impl\campaign\rulecmd\GladiatorSociety_GladiatorEndless.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\com\fs\starfarer\api\impl\campaign\rulecmd\GladiatorSociety_GladiatorFleetBattles.java
+C:\Users\Nicol\Documents\GitHub\GladiatorSociety\com\fs\starfarer\api\impl\campaign\rulecmd\GladiatorSociety_RedactedPitCMD.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\com\fs\starfarer\api\impl\campaign\rulecmd\GladiatorSociety_SalvagePitCMD.java
 C:\Users\Nicol\Documents\GitHub\GladiatorSociety\com\fs\starfarer\api\impl\campaign\rulecmd\GladiatorSociety_ShowDefaultVisual.java

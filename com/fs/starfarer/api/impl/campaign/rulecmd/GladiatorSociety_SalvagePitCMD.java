@@ -31,8 +31,9 @@ public class GladiatorSociety_SalvagePitCMD extends BaseCommandPlugin {
         switch (arg) {
             case "spawnPortal":
                 GladiatorSociety_SalvagePit.spawnEntryGate(dialog.getInteractionTarget());
-                // Close the dialog immediately so the player can fly to the gate
-                dialog.dismiss();
+                dialog.getTextPanel().addParagraph(
+                        "A Gate has appeared nearby. Fly to it to enter the Salvage Pit.",
+                        java.awt.Color.GREEN);
                 return true;
 
             case "enter":

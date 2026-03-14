@@ -234,7 +234,7 @@ public class GladiatorSociety_BlueprintRewardSystem {
         
         try {
             if (Global.getSettings().getHullModSpec(itemId) != null) {
-                return "modspec"; // Use string directly
+                return GladiatorSociety_Constants.MODSPEC_ITEM_ID;
             }
         } catch (Exception ignored) {}
         
@@ -351,7 +351,7 @@ public class GladiatorSociety_BlueprintRewardSystem {
                 break;
                 
             case HULLMOD:
-                SpecialItemData hullmodData = new SpecialItemData("modspec", reward.resourceId); // Use string directly
+                SpecialItemData hullmodData = new SpecialItemData(GladiatorSociety_Constants.MODSPEC_ITEM_ID, reward.resourceId);
                 playerCargo.addSpecial(hullmodData, 1);
                 GladiatorSociety_RewardIntel.notifyItem("Hull Mod Reward: ", reward.description);
                 break;
@@ -368,7 +368,7 @@ public class GladiatorSociety_BlueprintRewardSystem {
             case "ship": return Items.SHIP_BP;
             case "weapon": return Items.WEAPON_BP;
             case "fighter": return Items.FIGHTER_BP;
-            case "hullmod": return "modspec"; // Use string directly instead of Items.MODSPEC
+            case "hullmod": return GladiatorSociety_Constants.MODSPEC_ITEM_ID;
             default: return Items.SHIP_BP;
         }
     }
@@ -385,7 +385,7 @@ public class GladiatorSociety_BlueprintRewardSystem {
                     return Global.getSettings().getWeaponSpec(itemId) != null;
                 case Items.FIGHTER_BP:
                     return Global.getSettings().getFighterWingSpec(itemId) != null;
-                case "modspec": // Use string directly instead of Items.MODSPEC
+                case GladiatorSociety_Constants.MODSPEC_ITEM_ID:
                     return Global.getSettings().getHullModSpec(itemId) != null;
                 default:
                     return false;

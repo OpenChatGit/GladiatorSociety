@@ -31,6 +31,16 @@ if ($lazylib) {
     Write-Host "WARNING: LazyLib not found in mods folder, skipping."
 }
 
+# Add RAT (required dependency)
+$ratJar = Get-ChildItem "$SS_MODS\Random Assortment of Things*\jars\RandomAssortmentofThings.jar" -ErrorAction SilentlyContinue | Select-Object -First 1
+if ($ratJar) {
+    $CP_ENTRIES += $ratJar.FullName
+    Write-Host "RAT found: $($ratJar.FullName)"
+} else {
+    Write-Error "ERROR: Random Assortment of Things JAR not found! RAT is a required dependency."
+    exit 1
+}
+
 $CLASSPATH = $CP_ENTRIES -join ";"
 
 $BUILD_DIR = "build\classes"

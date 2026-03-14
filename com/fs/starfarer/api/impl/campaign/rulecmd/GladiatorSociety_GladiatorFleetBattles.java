@@ -267,7 +267,7 @@ public class GladiatorSociety_GladiatorFleetBattles extends BaseCommandPlugin {
                 if (fleet == null || fleet.isEmpty()) continue;
                 fleet.setCommander(person);
                 if (fleet.getFlagship() != null) fleet.getFlagship().setCaptain(person);
-                FleetFactoryV3.addCommanderSkills(person, fleet, null);
+                FleetFactoryV3.addCommanderSkills(person, fleet, new java.util.Random());
                 Misc.makeImportant(fleet, GladiatorSociety_Constants.GSFACTION_ID, 120);
                 fleet.setNoFactionInName(true);
                 // Use neutral faction so GS patrol fleets don't join as enemy
@@ -304,7 +304,7 @@ public class GladiatorSociety_GladiatorFleetBattles extends BaseCommandPlugin {
                 if (fleet == null || fleet.isEmpty()) continue;
                 fleet.setCommander(person);
                 if (fleet.getFlagship() != null) fleet.getFlagship().setCaptain(person);
-                FleetFactoryV3.addCommanderSkills(person, fleet, null);
+                FleetFactoryV3.addCommanderSkills(person, fleet, new java.util.Random());
                 String playerFactionId = Global.getSector().getPlayerFaction().getId();
                 fleet.setNoFactionInName(true);
                 fleet.setFaction(playerFactionId, true);
