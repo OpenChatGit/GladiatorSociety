@@ -1,3 +1,30 @@
+## Version 1.6.2 (Loot & Faction Fixes):
+
+BUGFIX: Fixed "Nothing of Value Was Found" on all caches and derelicts in the Salvage Pit
+- Root cause: DerelictThemeGenerator's internal Random was null, so no salvage seeds were generated
+- Fix: inject our Random into the generator via reflection before calling addCaches/addDerelictShips etc.
+- Same fix applied to RemnantThemeGenerator
+
+BUGFIX: Fixed planets in the Salvage Pit having no survey loot
+- Planets were marked UNSURVEYED with no conditions, resulting in empty survey results
+- Fix: removed UNSURVEYED flag and now call PlanetConditionGenerator to generate proper conditions
+
+BUGFIX: Fixed Endless Battle crash ("g != java.lang.String") when opening the reward screen
+- Root cause: incEndlessRound() was called directly inside the FID notifyLeave callback,
+  causing fleet member creation and intel notifications to fire during an active dialog state
+- Fix: reward processing now runs one frame later via a transientScript
+
+BUGFIX: Fixed missing ships in Nexerelin custom fleet editor for the Gladiator Society faction
+- knownShips list was incomplete - many standard Hegemony ships were missing
+- Added full Hegemony ship roster plus hegemony_bp tag and all three GS custom ships
+
+BUGFIX: Fixed debris fields in both Pits showing "Nothing of Value Was Found"
+- Debris rings were spawned as visual terrain only (no salvage data)
+- Now also spawns 1-3 salvageable DEBRIS_FIELD_SHARED entities per ring via addSalvageEntity
+- Applies to both Salvage Pit and [REDACTED] Pit
+
+============================================================
+
 ## Version 1.6.1 (Pit Overhaul & Crash Fix):
 
 BUGFIX: Fixed fatal crash when salvaging inside the Salvage Pit or [REDACTED] Pit

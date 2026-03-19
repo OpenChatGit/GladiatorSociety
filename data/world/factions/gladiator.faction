@@ -58,24 +58,50 @@
     },
 
     "knownShips":{
-        "tags":["heg_aux_bp"],
+        "tags":["heg_aux_bp", "hegemony_bp"],
         "hulls":[
+            # Frigates
             "lasher",
             "centurion",
+            "wolf",
+            "hound",
+            "kite",
+            "mudskipper",
+            "mudskipper2",
+            "shepherd",
+            "monitor",
+            "sunder",
+            # Destroyers
+            "hammerhead",
             "enforcer",
+            "medusa",
+            "buffalo2",
+            "mule",
+            # Cruisers
             "eagle",
             "falcon",
             "dominator",
             "mora",
+            "aurora",
+            "apogee",
+            "venture",
+            # Capitals
             "legion",
             "onslaught",
+            "conquest",
+            # Freighters / Tankers / Utility
+            "buffalo",
+            "phaeton",
+            "prometheus",
+            "atlas",
+            "colossus",
+            "colossus2",
+            "colossus3",
             "condor",
-            "wolf",
-            "hound",
-            "kite",
-            "hammerhead",
-            "medusa",
-            "aurora",
+            # GS custom ships
+            "GladiatorSociety_Cosmigon",
+            "GladiatorSociety_Night_Fury",
+            "GladiatorSociety_Samurai",
         ],
     },
 

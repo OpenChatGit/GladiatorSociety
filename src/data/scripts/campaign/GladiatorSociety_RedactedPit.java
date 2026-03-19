@@ -301,10 +301,12 @@ public class GladiatorSociety_RedactedPit {
             spawnAbyssalFleets(system, rand);
 
             // Patch any null-named entities - vanilla salvage code calls getName().startsWith() and will NPE
+            // Also pre-scan all salvageable entities so loot is immediately available
             for (SectorEntityToken entity : system.getAllEntities()) {
                 if (entity.getName() == null) {
                     entity.setName("Unknown");
                 }
+                entity.getMemoryWithoutUpdate().unset(com.fs.starfarer.api.util.Misc.UNSURVEYED);
             }
 
             // Exit gate outside all debris rings
@@ -545,6 +547,22 @@ public class GladiatorSociety_RedactedPit {
                     rand.nextFloat() * 360f, orbitRadius, 300f + rand.nextFloat() * 200f);
         } catch (Throwable t) {
             LOG.warn("GS Redacted Pit: Could not add debris ring at " + orbitRadius, t);
+        }
+
+        // Salvageable debris field entities scattered around the ring (1-3 per ring)
+        int count = 1 + rand.nextInt(3);
+        for (int i = 0; i < count; i++) {
+            try {
+                SectorEntityToken salvageDebris = com.fs.starfarer.api.impl.campaign.procgen.themes.BaseThemeGenerator.addSalvageEntity(
+                        rand, system,
+                        com.fs.starfarer.api.impl.campaign.ids.Entities.DEBRIS_FIELD_SHARED,
+                        Factions.NEUTRAL);
+                if (salvageDebris != null) {
+                    float angle = rand.nextFloat() * 360f;
+                    float dist = orbitRadius * (0.8f + rand.nextFloat() * 0.4f);
+                    salvageDebris.setCircularOrbit(focus, angle, dist, 300f + rand.nextFloat() * 200f);
+                }
+            } catch (Throwable t) { LOG.warn("GS Redacted Pit: Could not add salvage debris at " + orbitRadius, t); }
         }
     }
 

@@ -234,6 +234,12 @@ public class GladiatorSociety_SalvagePit {
 
             // Theme generators - now with proper sysData
             DerelictThemeGenerator derelictGen = new DerelictThemeGenerator();
+            // Inject our rand so salvage seeds are properly generated for caches/derelicts
+            try {
+                java.lang.reflect.Field randField = com.fs.starfarer.api.impl.campaign.procgen.themes.BaseThemeGenerator.class.getDeclaredField("random");
+                randField.setAccessible(true);
+                randField.set(derelictGen, rand);
+            } catch (Throwable e) { LOG.warn("GS Salvage Pit: Could not inject random into DerelictThemeGenerator", e); }
             WeightedRandomPicker<String> factionPicker = new WeightedRandomPicker<String>(rand);
             factionPicker.add(Factions.REMNANTS, 3f);
             factionPicker.add(Factions.INDEPENDENT, 1f);
@@ -270,6 +276,11 @@ public class GladiatorSociety_SalvagePit {
             derelictGen.addObjectives(sysData, 1f);
 
             RemnantThemeGenerator remnantGen = new RemnantThemeGenerator();
+            try {
+                java.lang.reflect.Field randField = com.fs.starfarer.api.impl.campaign.procgen.themes.BaseThemeGenerator.class.getDeclaredField("random");
+                randField.setAccessible(true);
+                randField.set(remnantGen, rand);
+            } catch (Throwable e) { LOG.warn("GS Salvage Pit: Could not inject random into RemnantThemeGenerator", e); }
             WeightedRandomPicker<String> stationPicker = new WeightedRandomPicker<String>(rand);
             stationPicker.add("remnant_station2_Standard", 2f); stationPicker.add("remnant_station2_Damaged", 1f);
             List<CampaignFleetAPI> stations = remnantGen.addBattlestations(sysData, 1f, 1, 1, stationPicker);
@@ -277,10 +288,13 @@ public class GladiatorSociety_SalvagePit {
             spawnRemnantFleets(system, rand, stations);
 
             // Patch any null-named entities - vanilla salvage code calls getName().startsWith() and will NPE
+            // Also pre-scan all salvageable entities so loot is immediately available
             for (SectorEntityToken entity : system.getAllEntities()) {
                 if (entity.getName() == null) {
                     entity.setName("Unknown");
                 }
+                // Mark as surveyed/scanned so caches and derelicts have loot immediately
+                entity.getMemoryWithoutUpdate().unset(com.fs.starfarer.api.util.Misc.UNSURVEYED);
             }
 
             // Exit gate outside all debris rings
@@ -329,7 +343,9 @@ public class GladiatorSociety_SalvagePit {
                 float orbitDays = 200f + orbitRadii[i] / 20f + rand.nextFloat() * 100f;
                 PlanetAPI planet = system.addPlanet(system.getId() + "_planet_" + i, star,
                         "Planet " + (i + 1), type, rand.nextFloat() * 360f, radius, orbitRadii[i], orbitDays);
-                planet.getMemoryWithoutUpdate().set(com.fs.starfarer.api.util.Misc.UNSURVEYED, true);
+                // Generate proper planet conditions so survey loot spawns correctly
+                com.fs.starfarer.api.impl.campaign.procgen.PlanetConditionGenerator.generateConditionsForPlanet(
+                        planet, com.fs.starfarer.api.impl.campaign.procgen.StarAge.ANY);
                 sysData.planets.add(planet);
                 sysData.alreadyUsed.add(planet);
             } catch (Throwable t) { LOG.warn("GS Salvage Pit: Could not add planet " + i, t); }
@@ -338,13 +354,30 @@ public class GladiatorSociety_SalvagePit {
 
     private static void addDebrisRing(StarSystemAPI system, SectorEntityToken focus, float orbitRadius, Random rand) {
         try {
+            // Visual terrain ring
             DebrisFieldTerrainPlugin.DebrisFieldParams params =
                     new DebrisFieldTerrainPlugin.DebrisFieldParams(orbitRadius * 0.25f, 1f, 150f, 500f);
             params.source = DebrisFieldTerrainPlugin.DebrisFieldSource.MIXED;
             SectorEntityToken debris = system.addTerrain(Terrain.DEBRIS_FIELD, params);
             debris.setName("Debris Field");
             debris.setCircularOrbit(focus, rand.nextFloat() * 360f, orbitRadius, 350f + rand.nextFloat() * 200f);
-        } catch (Throwable t) { LOG.warn("GS Salvage Pit: Could not add debris ring at " + orbitRadius, t); }
+        } catch (Throwable t) { LOG.warn("GS Salvage Pit: Could not add debris ring terrain at " + orbitRadius, t); }
+
+        // Salvageable debris field entities scattered around the ring (1-3 per ring)
+        int count = 1 + rand.nextInt(3);
+        for (int i = 0; i < count; i++) {
+            try {
+                SectorEntityToken salvageDebris = com.fs.starfarer.api.impl.campaign.procgen.themes.BaseThemeGenerator.addSalvageEntity(
+                        rand, system,
+                        com.fs.starfarer.api.impl.campaign.ids.Entities.DEBRIS_FIELD_SHARED,
+                        Factions.NEUTRAL);
+                if (salvageDebris != null) {
+                    float angle = rand.nextFloat() * 360f;
+                    float dist = orbitRadius * (0.8f + rand.nextFloat() * 0.4f);
+                    salvageDebris.setCircularOrbit(focus, angle, dist, 350f + rand.nextFloat() * 200f);
+                }
+            } catch (Throwable t) { LOG.warn("GS Salvage Pit: Could not add salvage debris at " + orbitRadius, t); }
+        }
     }
 
     private static void spawnRemnantFleets(StarSystemAPI system, Random rand, List<CampaignFleetAPI> stations) {

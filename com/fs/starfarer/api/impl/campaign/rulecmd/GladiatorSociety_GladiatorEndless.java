@@ -235,7 +235,16 @@ public class GladiatorSociety_GladiatorEndless extends BaseCommandPlugin {
                         int payment = (int) (endcontent.getEndlessReward() * involvement);
                         Global.getSector().getPlayerFleet().getCargo().getCredits().add(payment);
                         src.data.scripts.campaign.GladiatorSociety_RewardIntel.notifyCredits(payment, "Endless Battle");
-                        endcontent.incEndlessRound();
+                        // Delay reward processing by one frame to avoid crashing during dialog callbacks
+                        final GladiatorSociety_EndlessContent contentRef = endcontent;
+                        Global.getSector().addTransientScript(new com.fs.starfarer.api.EveryFrameScript() {
+                            private boolean done = false;
+                            public boolean isDone() { return done; }
+                            public boolean runWhilePaused() { return false; }
+                            public void advance(float amount) {
+                                if (!done) { done = true; contentRef.incEndlessRound(); }
+                            }
+                        });
                         
                         
                         //  dialog.dismiss();
