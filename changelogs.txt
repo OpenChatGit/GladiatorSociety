@@ -1,3 +1,13 @@
+## Version 1.6.3 (Loot Fix):
+
+BUGFIX: Fixed debris fields in both Pits showing "Nothing of Value Was Found"
+- Root cause: DEBRIS_FIELD_SHARED has no drop tables by design - it is purely a terrain obstacle
+- Fix: debris rings now spawn 2-4 real cache entities (supply, weapons, equipment, technology)
+  directly via BaseThemeGenerator.addSalvageEntity() with proper salvage seeds
+- Applies to both Salvage Pit and [REDACTED] Pit
+
+============================================================
+
 ## Version 1.6.2 (Loot & Faction Fixes):
 
 BUGFIX: Fixed "Nothing of Value Was Found" on all caches and derelicts in the Salvage Pit

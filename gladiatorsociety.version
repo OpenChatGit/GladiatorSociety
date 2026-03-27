@@ -5,9 +5,9 @@
     "modVersion": {
         "major": 1,
         "minor": 6,
-        "patch": 2
+        "patch": 3
     },
     "starsectorVersion": "0.98a",
-    "directDownloadURL": "https://github.com/OpenChatGit/GladiatorSociety/releases/download/1.6.2/GladiatorSociety-1.6.2.zip",
+    "directDownloadURL": "https://github.com/OpenChatGit/GladiatorSociety/releases/download/1.6.3/GladiatorSociety-1.6.3.zip",
     "changelogURL": "https://raw.githubusercontent.com/OpenChatGit/GladiatorSociety/main/changelogs.txt"
 }
