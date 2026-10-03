@@ -126,7 +126,10 @@ public class GladiatorSociety_FleetBattleContent {
                 nextAllyFaction = ally;
                 return; // success with discovery
             }
-        } catch (Throwable ignored) { }
+        } catch (RuntimeException ex) {
+            Global.getLogger(GladiatorSociety_FleetBattleContent.class)
+                    .warn("Faction discovery failed; using the configured Endless faction fallback", ex);
+        }
 
         // 2) Fallback to existing logic
         WeightedRandomPicker<String> enemyPicker = new WeightedRandomPicker<>();

@@ -280,7 +280,9 @@ public class GladiatorSociety_RedactedPit {
                             "Planet " + (i + 1), Planets.BARREN,
                             rand.nextFloat() * 360f, 60f + rand.nextFloat() * 40f,
                             orbitRadii[i], 200f + orbitRadii[i] / 20f);
-                } catch (Throwable t) { /* skip */ }
+                } catch (RuntimeException ex) {
+                    LOG.warn("GS Redacted Pit: Could not add planet " + i, ex);
+                }
             }
 
             // Debris rings

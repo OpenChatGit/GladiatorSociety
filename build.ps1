@@ -1,5 +1,8 @@
 # GladiatorSociety Build Script
 # Compiles all Java sources and packages them into jars/GladiatorSociety.jar
+param(
+    [switch]$ValidateOnly
+)
 
 $JAVAC = "C:\Program Files\Zulu\zulu-17\bin\javac.exe"
 $JAR   = "C:\Program Files\Zulu\zulu-17\bin\jar.exe"
@@ -43,7 +46,7 @@ if ($ratJar) {
 
 $CLASSPATH = $CP_ENTRIES -join ";"
 
-$BUILD_DIR = "build\classes"
+$BUILD_DIR = if ($ValidateOnly) { "build\validation-classes" } else { "build\classes" }
 $JAR_OUT   = "jars\GladiatorSociety.jar"
 
 # Collect all .java source files (src/ and com/)
@@ -89,6 +92,11 @@ Remove-Item $JAVAC_ARGS_FILE -Force
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Compilation failed!"
     exit 1
+}
+
+if ($ValidateOnly) {
+    Write-Host "Game API compilation check passed. Release JAR was not changed."
+    exit 0
 }
 
 Write-Host "Compilation successful. Packaging JAR..."

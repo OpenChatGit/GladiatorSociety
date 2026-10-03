@@ -10,3 +10,8 @@ Work exactly like Nexerelin faction.
 For add your faction on the endless battle, just add the faction id on your own CSV EndlessFaction.csv
 
 For add your Endless reward, same thing.
+
+Configuration validation:
+Run `.\validate.ps1` from the mod folder to check JSON/CSV data and compile all Java sources
+against the locally installed Starsector, LazyLib, and Random Assortment of Things APIs.
+The API compile check validates references at compile time; it does not launch the game.

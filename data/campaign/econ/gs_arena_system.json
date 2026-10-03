@@ -34,5 +34,14 @@
 				"black_market",
 			],
 		},
+		{
+			"entities":["gs_vindex_moon"],
+			"faction":"gladiator",
+			"size":5,
+			"freePort":false,
+			"startingConditions":["population_5", "no_atmosphere", "low_gravity", "ore_moderate", "rare_ore_sparse"],
+			"industries":["population", "spaceport", "mining", ["orbitalworks", "corrupted_nanoforge"], "militarybase", "grounddefenses"],
+			"submarkets":["open_market", "storage", "generic_military", "black_market"],
+		},
 	],
 }

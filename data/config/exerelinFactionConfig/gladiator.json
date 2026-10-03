@@ -9,15 +9,17 @@
 
     "marketSpawnWeight":1,
 
-    # GS starts friendly with Hegemony/Lions Guard, neutral to most, hostile to pirates/Luddic Path
+    # The Society retains Hegemony ties and treats the Path, pirates, and Remnants as active threats.
     "startRelationships":{
         "hegemony":0.4,
         "lions_guard":0.5,
         "tritachyon":-0.3,
         "persean":-0.2,
+        "luddic_church":-0.2,
         "luddic_path":-0.8,
         "pirates":-0.6,
         "remnant":-0.8,
+        "sindrian_diktat":0.1,
     },
     "maxRelationships":{
         "remnant":-0.51,
@@ -39,7 +41,12 @@
 
     "isPirateNeutral":false,
 
-    "colonyExpeditionChance":0.3,
+    "colonyExpeditionChance":0.45,
+    "colonyTargetValuator":"exerelin.campaign.colony.IndustrialColonyTargetValuator",
+    "specialForcesMaxFleets":1,
+    "specialForcesCountMult":0.75,
+    "specialForcesSizeMult":0.8,
+    "patrolSizeMult":0.85,
 
     "groundBattleSettings":{
         "moraleDamageTakenMult":0.85,
@@ -90,6 +97,7 @@
     "industrySeeds":[
         {"id":"militarybase", "mult":0.4},
         {"id":"grounddefenses", "mult":0.3},
+        {"id":"orbitalworks", "mult":0.2},
         {"id":"heavyindustry", "mult":0.2},
         {"id":"fuelprod", "mult":0.1},
     ],

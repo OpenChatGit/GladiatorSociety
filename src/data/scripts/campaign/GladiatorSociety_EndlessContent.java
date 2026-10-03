@@ -142,13 +142,11 @@ public class GladiatorSociety_EndlessContent {
 
         // Read configurable split for vanilla vs modded
         float split = 0.5f;
-        try {
-            GladiatorSociety_FactionDiscoveryConfig cfg = GladiatorSociety_FactionDiscoveryConfig.load();
-            split = cfg.vanillaModdedSplit;
-            if (Float.isNaN(split)) split = 0.5f;
-            if (split < 0f) split = 0f;
-            if (split > 1f) split = 1f;
-        } catch (Throwable ignored) {}
+        GladiatorSociety_FactionDiscoveryConfig cfg = GladiatorSociety_FactionDiscoveryConfig.load();
+        split = cfg.vanillaModdedSplit;
+        if (Float.isNaN(split)) split = 0.5f;
+        if (split < 0f) split = 0f;
+        if (split > 1f) split = 1f;
         boolean useModded = Math.random() < split;
         String picked = useModded ? pickFrom.apply(moddedBucket) : pickFrom.apply(vanillaBucket);
         if (picked == null) picked = useModded ? pickFrom.apply(vanillaBucket) : pickFrom.apply(moddedBucket);

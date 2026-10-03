@@ -183,6 +183,8 @@
     "illegalCommodities":[
         "drugs",
         "organs",
+        "hand_weapons",
+        "ai_cores",
     ],
 
     "portraits":{
@@ -227,7 +229,7 @@
 
     "custom":{
         "exemptFromFoodShortages":true,
-        "noPatrols":true,
+        "noPatrols":false,
         "ignoreTradeWithEnemiesForReputation":true,
         "allowsTransponderOffTrade":true,
         "postsNoBounties":false,

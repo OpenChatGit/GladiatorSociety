@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - '*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Existing or new version tag to package and release (for example 1.6.8)
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -13,16 +19,52 @@ jobs:
     name: Package mod and publish release
     runs-on: ubuntu-latest
     steps:
+      - name: Resolve release tag
+        id: release
+        env:
+          REQUESTED_VERSION: ${{ inputs.version }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            tag="$REQUESTED_VERSION"
+          else
+            tag="$GITHUB_REF_NAME"
+          fi
+          if ! [[ "$tag" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Unsupported release tag: $tag" >&2
+            exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
       - name: Check out tagged source
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref }}
+
+      - name: Validate mod data
+        run: |
+          if [ -f .github/scripts/validate_mod_data.py ]; then
+            python3 .github/scripts/validate_mod_data.py
+          else
+            echo "::notice::This older tag predates the mod data validator; validation was skipped."
+          fi
 
       - name: Build release ZIP
-        run: python3 .github/scripts/package_release.py "$GITHUB_REF_NAME"
+        run: python3 .github/scripts/package_release.py "${{ steps.release.outputs.tag }}"
 
       - name: Check Markdown release notes
-        run: test -s ".github/release-notes/${GITHUB_REF_NAME}.md"
+        run: test -s ".github/release-notes/${{ steps.release.outputs.tag }}.md"
 
-      - name: Publish GitHub release
+      - name: Create or update GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "$GITHUB_REF_NAME" "dist/GladiatorSociety-${GITHUB_REF_NAME}.zip" --verify-tag --title "Gladiator Society ${GITHUB_REF_NAME}" --notes-file ".github/release-notes/${GITHUB_REF_NAME}.md"
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          archive="dist/GladiatorSociety-${RELEASE_TAG}.zip"
+          notes=".github/release-notes/${RELEASE_TAG}.md"
+          title="Gladiator Society ${RELEASE_TAG}"
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release edit "$RELEASE_TAG" --title "$title" --notes-file "$notes"
+            gh release upload "$RELEASE_TAG" "$archive" --clobber
+          else
+            gh release create "$RELEASE_TAG" "$archive" --verify-tag --title "$title" --notes-file "$notes"
+          fi

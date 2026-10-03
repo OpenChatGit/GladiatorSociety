@@ -21,29 +21,17 @@ import com.fs.starfarer.api.impl.campaign.FleetEncounterContext;
 import com.fs.starfarer.api.impl.campaign.FleetInteractionDialogPluginImpl.FIDConfig;
 import com.fs.starfarer.api.impl.campaign.FleetInteractionDialogPluginImpl.FIDConfigGen;
 import com.fs.starfarer.api.impl.campaign.FleetInteractionDialogPluginImpl.FIDDelegate;
-import com.fs.starfarer.api.impl.campaign.events.OfficerManagerEvent;
-import com.fs.starfarer.api.impl.campaign.events.OfficerManagerEvent.SkillPickPreference;
 import static com.fs.starfarer.api.impl.campaign.fleets.FleetFactoryV3.*;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetParamsV3;
 import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
-import com.fs.starfarer.api.loading.WeaponGroupSpec;
-import com.fs.starfarer.api.loading.WeaponGroupType;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.api.util.WeightedRandomPicker;
-import java.io.IOException;
-import java.util.Iterator;
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import src.data.scripts.campaign.dataclass.GladiatorSociety_BountyData;
 import src.data.scripts.campaign.dataclass.GladiatorSociety_DataShip;
 import src.data.scripts.campaign.GladiatorSociety_FactionDiscoveryConfig;
 
 public class GladiatorSociety_TinyFleetFactoryV2 {
-
-    protected static final String CUSTOMVARIANTPATH = "data/config/gsounty/gladiator_variants/";
 
     public static final Logger LOG = Global.getLogger(GladiatorSociety_TinyFleetFactoryV2.class);
 
@@ -52,139 +40,13 @@ public class GladiatorSociety_TinyFleetFactoryV2 {
                 new GSFleetInteractionConfigGen());
     }
 
-    private static ShipVariantAPI addCustomVariant(String variantid) {
-        try {
-            LOG.info("|||   Creating custom " + variantid + ".   |||");
-            JSONObject json = Global.getSettings().loadJSON(CUSTOMVARIANTPATH + variantid + ".variant");
-            if (json != null) {
-                String hullid = json.optString("hullId", null);
-                if (hullid == null || hullid.isEmpty()) {
-                    LOG.info("|||   HullId not found on the variant  |||");
-                    return null;
-                }
-                LOG.info("|||   HullId found: " + hullid + "   |||");
-                JSONArray modules = json.optJSONArray("modules");
-                ShipVariantAPI variant = null;
-               /* if (modules != null) {
-                    for (String variand : Global.getSettings().getAllVariantIds()) {
-                        if (variand.startsWith(hullid)) {
-                            variant = Global.getSettings().getVariant(variand).clone();
-                            variant.setSource(VariantSource.REFIT);
-                            variant.clearHullMods();
-                            variant.clearPermaMods();
-                            break;
-                        }
-                    }
-                } else {*/
-                    variant = Global.getSettings().createEmptyVariant(hullid,
-                            Global.getSettings().getHullSpec(hullid)
-                    );
-                //}
-                if (variant == null) {
-                    LOG.info("|||  Empty Variant failed: The hullid do not exist.  |||");
-                    return null;
-                }
+    private static boolean isValidationFleet(FleetParamsV3 params) {
+        return params != null && params.fleetType != null
+                && params.fleetType.equals(GladiatorSociety_FactionDiscoveryConfig.load().validationFleetType);
+    }
 
-                variant.setVariantDisplayName(json.optString("displayName", "Empty"));
-                variant.setNumFluxCapacitors(json.optInt("fluxCapacitors", 0));
-                variant.setNumFluxVents(json.optInt("fluxVents", 0));
-                JSONArray hullmods = json.optJSONArray("hullMods");
-                if (hullmods != null) {
-                    for (int i = 0; i < hullmods.length(); i++) {
-                        variant.addMod(hullmods.getString(i));
-                    }
-                }
-                hullmods = json.optJSONArray("permaMods");
-                if (hullmods != null) {
-                    for (int i = 0; i < hullmods.length(); i++) {
-                        variant.addPermaMod(hullmods.getString(i));
-                    }
-                }
-                for (WeaponGroupSpec group : variant.getWeaponGroups()) {
-                    WeaponGroupSpec clone = group.clone();
-                    for (String slot : clone.getSlots()) {
-                        group.removeSlot(slot);
-                    }
-                }
-                
-               // LOG.info("|||  variant.getWeaponGroups().size():" + variant.getWeaponGroups().size() + "  |||");
-                JSONArray weapons = json.optJSONArray("weaponGroups");
-                if (weapons != null) {
-                  //  LOG.info("|||  weapons.length():" + weapons.length() + "  |||");
-
-                    int size = variant.getWeaponGroups().size();
-                    for (int i = 0; i < weapons.length(); i++) {
-                        JSONObject weapongroup = weapons.optJSONObject(i);
-                        WeaponGroupSpec weapoongroup;
-                        if(i<size){
-                            weapoongroup = variant.getWeaponGroups().get(i);
-                        }else{
-                            weapoongroup = new WeaponGroupSpec();
-                        }
-                        
-                        weapoongroup.setType((weapongroup.optString("mode", "ALTERNATING").startsWith("A") ? WeaponGroupType.ALTERNATING : WeaponGroupType.LINKED));
-                        weapoongroup.setAutofireOnByDefault(weapongroup.optBoolean("autofire", false));
-                        JSONObject weaponslist = weapongroup.optJSONObject("weapons");
-                        //  LOG.info("weaponslist: " +weaponslist);
-                        if (weaponslist != null) {
-                            // LOG.info("Number of weapons on the weapon group: " +weaponslist.length());
-                            Iterator<?> iterator = weaponslist.keys();
-
-                            while (iterator.hasNext()) {
-                                String slot = (String) iterator.next();
-                                weapoongroup.addSlot(slot);
-                               // LOG.info("|||  slot found: \"" + slot + "\": \"" +  weaponslist.optString(slot) + "\"  |||");
-                                variant.addWeapon(slot, weaponslist.optString(slot));
-                            }
-                        }
-                        if(!(i<size)){
-                             variant.addWeaponGroup( weapoongroup);
-                        }
-                    }
-                }
-               // LOG.info("|||  variant.getWeaponGroups().size():" + variant.getWeaponGroups().size() + "  |||");
-                JSONArray wings = json.optJSONArray("wings");
-                if (wings != null) {
-                    for (int i = 0; i < wings.length(); i++) {
-                        variant.setWingId(i, wings.getString(i));
-                    }
-                }
-                
-                if (modules != null) {
-                    for (int i = 0; i < modules.length(); i++) {
-                        JSONObject module = modules.optJSONObject(i);
-                        if (module == null) {
-                            continue;
-                        }
-                        String slotModule = (String) module.keys().next();
-                        String moduleVariantId = (String) module.optString(slotModule);
-                        LOG.info("|||  Module found: " + slotModule + ": " + moduleVariantId + "  |||");
-                        if (moduleVariantId != null && !moduleVariantId.isEmpty()) {
-                            ShipVariantAPI modulevariant = Global.getSettings().getVariant(moduleVariantId);
-                            if (modulevariant == null) {
-                                modulevariant = addCustomVariant(moduleVariantId);
-                            }
-                            if (modulevariant != null) {
-                                variant.setModuleVariant(slotModule, modulevariant);
-                            }
-                            else{
-                                LOG.info("||| Failed to create the variant module.  |||");
-                                return null;
-                            }
-                        }
-                    }
-                }
-                //variant.autoGenerateWeaponGroups();
-                return variant;
-            } else {
-                LOG.info("|||  The json do not exist  |||");
-            }
-
-        } catch (IOException | JSONException | RuntimeException ex) {
-            LOG.warn("Failed to create custom variant " + variantid, ex);
-        }
-        LOG.info("||| Failed to create the variant ship.  |||");
-        return null;
+    private static void markValidationFleet(CampaignFleetAPI fleet) {
+        fleet.getMemoryWithoutUpdate().set("$gs_validation", true);
     }
 
     public static class GSFleetInteractionConfigGen implements FIDConfigGen {
@@ -261,7 +123,7 @@ public class GladiatorSociety_TinyFleetFactoryV2 {
             ShipVariantAPI variant2;
               int countFleet = 0;
             if (mothership.hullid != null) {
-                variant2 = addCustomVariant(mothership.ship);
+                variant2 = GladiatorSociety_CustomVariantFactory.create(mothership.ship);
                 if (variant2 != null) {
                     memb = Global.getFactory().createFleetMember(FleetMemberType.SHIP, variant2);
                    
@@ -287,7 +149,7 @@ public class GladiatorSociety_TinyFleetFactoryV2 {
 
                 LOG.info("Create " + variant.ship + " x " + variant.number);
                 if (variant.hullid != null) {
-                    variant2 = addCustomVariant(variant.ship);
+                    variant2 = GladiatorSociety_CustomVariantFactory.create(variant.ship);
                     if (variant2 != null) {
                         for (int i = 0; i < variant.number; i++) {
                             memb = Global.getFactory().createFleetMember(FleetMemberType.SHIP, variant2);
@@ -498,17 +360,11 @@ public class GladiatorSociety_TinyFleetFactoryV2 {
                 member.getRepairTracker().setCR(member.getRepairTracker().getMaxCR());
             }
             // If this is a validator/test fleet, do NOT attach GS interaction or extra behavior
-            boolean isValidation = false;
-            try {
-                isValidation = params != null && params.fleetType != null
-                        && params.fleetType.equals(GladiatorSociety_FactionDiscoveryConfig.load().validationFleetType);
-            } catch (Throwable ignored) {}
-
-            if (!isValidation) {
+            if (!isValidationFleet(params)) {
                 GladiatorSociety_TinyFleetFactoryV2.addGSInteractionConfig(fleet);
             } else {
                 // Mark to help other systems ignore this ephemeral fleet
-                try { fleet.getMemoryWithoutUpdate().set("$gs_validation", true); } catch (Throwable ignored) {}
+                markValidationFleet(fleet);
             }
 
             return fleet;
@@ -533,16 +389,10 @@ public class GladiatorSociety_TinyFleetFactoryV2 {
         }
 
         // Skip GS interaction config for validation fleets
-        boolean isValidation = false;
-        try {
-            isValidation = params != null && params.fleetType != null
-                    && params.fleetType.equals(GladiatorSociety_FactionDiscoveryConfig.load().validationFleetType);
-        } catch (Throwable ignored) {}
-
-        if (!isValidation) {
+        if (!isValidationFleet(params)) {
             addGSInteractionConfig(fleet);
         } else {
-            try { fleet.getMemoryWithoutUpdate().set("$gs_validation", true); } catch (Throwable ignored) {}
+            markValidationFleet(fleet);
         }
 
         return fleet;

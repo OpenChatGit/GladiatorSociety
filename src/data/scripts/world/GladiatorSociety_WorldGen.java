@@ -1,9 +1,7 @@
 package src.data.scripts.world;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.FactionAPI;
-import com.fs.starfarer.api.campaign.FleetAssignment;
 import com.fs.starfarer.api.campaign.JumpPointAPI;
 import com.fs.starfarer.api.campaign.OrbitAPI;
 import com.fs.starfarer.api.campaign.PlanetAPI;
@@ -14,17 +12,14 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.SectorGeneratorPlugin;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.characters.FullName;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
-import com.fs.starfarer.api.impl.campaign.ids.FleetTypes;
-import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import com.fs.starfarer.api.impl.campaign.ids.Ranks;
 import com.fs.starfarer.api.impl.campaign.ids.StarTypes;
 import com.fs.starfarer.api.impl.campaign.ids.Voices;
-import com.fs.starfarer.api.impl.campaign.fleets.FleetFactoryV3;
-import com.fs.starfarer.api.impl.campaign.fleets.FleetParamsV3;
 import com.fs.starfarer.api.impl.campaign.procgen.NebulaEditor;
 import com.fs.starfarer.api.impl.campaign.shared.SharedData;
 import com.fs.starfarer.api.impl.campaign.terrain.HyperspaceTerrainPlugin;
@@ -37,8 +32,11 @@ public class GladiatorSociety_WorldGen implements SectorGeneratorPlugin {
 
     public static final String SYSTEM_ID   = "gs_arena_system";
     public static final String PLANET_ID   = "gs_gladius_prime";
+    public static final String GULF_ID = "gs_the_gulf";
+    public static final String MILITARY_MOON_ID = "gs_vindex_moon";
     public static final String STATION_ID  = "gs_arena_station";
     public static final String MARKET_ID   = "gs_gladius_prime"; // market ID = primary entity ID (set by economy.json)
+    public static final String MILITARY_MARKET_ID = "gs_vindex_moon";
     public static final String GS_FACTION  = "gladiator";
 
     private static final Logger LOG = Global.getLogger(GladiatorSociety_WorldGen.class);
@@ -70,11 +68,22 @@ public class GladiatorSociety_WorldGen implements SectorGeneratorPlugin {
                 Planets.PLANET_TERRAN, 45f, 180f, 2800f, 200f);
         gladiusPrime.setCustomDescriptionId("gs_gladius_prime");
 
-        // The Arena station orbits Gladius Prime
+        // The Gulf is classified as uninhabitable by the Society despite its jungle biosphere.
+        PlanetAPI gulf = system.addPlanet(
+                GULF_ID, star, "The Gulf", "jungle", 165f, 220f, 6500f, 310f);
+        gulf.setCustomDescriptionId("gs_the_gulf");
+
+        // Vindex is a militarized moon and a second, production-focused GS market.
+        PlanetAPI vindex = system.addPlanet(
+                MILITARY_MOON_ID, gladiusPrime, "Vindex",
+                Planets.BARREN, 210f, 75f, 1000f, 100f);
+        vindex.setCustomDescriptionId("gs_vindex_moon");
+
+        // The Arena station orbits The Gulf, which the Society keeps under restriction.
         SectorEntityToken station = system.addCustomEntity(
                 STATION_ID, "The Arena", "station_side06", GS_FACTION);
         station.setCustomDescriptionId("gs_arena_station");
-        station.setCircularOrbitPointingDown(gladiusPrime, 0f, 350f, 25f);
+        station.setCircularOrbitPointingDown(gulf, 0f, 350f, 25f);
 
         // ── Comm Relay ───────────────────────────────────────────────────────
         SectorEntityToken commRelay = system.addCustomEntity(
@@ -117,17 +126,18 @@ public class GladiatorSociety_WorldGen implements SectorGeneratorPlugin {
         system.autogenerateHyperspaceJumpPoints(true, true, false);
         clearNebula(system);
 
-        // Market is defined in data/campaign/econ/gs_arena_system.json
+        // Markets are defined in data/campaign/econ/gs_arena_system.json
         // System location is registered in data/campaign/starmap.json
 
         LOG.info("GS WorldGen: Arena system generated at (-14000, 5000)");
     }
 
     /**
-     * Called from ModPlugin.onNewGameAfterEconomyLoad() - adds Varro and patrol fleet.
+     * Called from ModPlugin.onNewGameAfterEconomyLoad() - ensures the moon market and adds Varro.
      * Market/conditions/industries are loaded from data/campaign/econ/gs_arena_system.json
      */
     public static void postEconomySetup(SectorAPI sector) {
+        ensureMilitaryMoonMarket(sector);
         MarketAPI market = sector.getEconomy().getMarket(MARKET_ID);
         if (market == null) {
             SectorEntityToken planet = sector.getEntityById(PLANET_ID);
@@ -139,15 +149,113 @@ public class GladiatorSociety_WorldGen implements SectorGeneratorPlugin {
         }
 
         market.setSurveyLevel(MarketAPI.SurveyLevel.FULL);
+        MarketAPI militaryMarket = sector.getEconomy().getMarket(MILITARY_MARKET_ID);
+        if (militaryMarket != null) militaryMarket.setSurveyLevel(MarketAPI.SurveyLevel.FULL);
 
         // Add Commander Varro
         addVarro(sector, market);
 
-        // Spawn system patrol fleet
-        StarSystemAPI system = sector.getStarSystem(SYSTEM_ID);
-        if (system != null) spawnSystemFleet(system);
-
         LOG.info("GS WorldGen: Post-economy setup complete");
+    }
+
+    /** Adds the production moon to older saves created before it was part of the mod. */
+    public static void ensureMilitaryMoonMarket(SectorAPI sector) {
+        if (sector == null) return;
+        StarSystemAPI system = sector.getStarSystem(SYSTEM_ID);
+        if (system == null) return;
+
+        SectorEntityToken parentEntity = sector.getEntityById(PLANET_ID);
+        if (!(parentEntity instanceof PlanetAPI)) {
+            LOG.warn("GS WorldGen: Cannot create Vindex because Gladius Prime is missing");
+            return;
+        }
+
+        SectorEntityToken moonEntity = sector.getEntityById(MILITARY_MOON_ID);
+        PlanetAPI moon;
+        if (moonEntity instanceof PlanetAPI) {
+            moon = (PlanetAPI) moonEntity;
+        } else {
+            moon = system.addPlanet(MILITARY_MOON_ID, (PlanetAPI) parentEntity, "Vindex",
+                    Planets.BARREN, 210f, 75f, 1000f, 100f);
+        }
+        if (moon == null) {
+            LOG.error("GS WorldGen: Failed to create Vindex in an existing campaign");
+            return;
+        }
+        moon.setCircularOrbit((PlanetAPI) parentEntity, 210f, 1000f, 100f);
+        moon.setCustomDescriptionId("gs_vindex_moon");
+
+        MarketAPI market = sector.getEconomy().getMarket(MILITARY_MARKET_ID);
+        if (market != null) {
+            market.setPrimaryEntity(moon);
+            moon.setFaction(market.getFactionId());
+            moon.setMarket(market);
+            if (!market.getConnectedEntities().contains(moon)) market.getConnectedEntities().add(moon);
+            return;
+        }
+
+        market = Global.getFactory().createMarket(MILITARY_MARKET_ID, "Vindex", 5);
+        market.setSize(5);
+        market.setFactionId(GS_FACTION);
+        moon.setFaction(GS_FACTION);
+        market.setPrimaryEntity(moon);
+        market.setSurveyLevel(MarketAPI.SurveyLevel.FULL);
+        market.setPlanetConditionMarketOnly(false);
+        market.setUseStockpilesForShortages(true);
+        market.getConnectedEntities().add(moon);
+        moon.setMarket(market);
+
+        market.addCondition("population_5");
+        market.addCondition("no_atmosphere");
+        market.addCondition("low_gravity");
+        market.addCondition("ore_moderate");
+        market.addCondition("rare_ore_sparse");
+        market.addIndustry("population");
+        market.addIndustry("spaceport");
+        market.addIndustry("mining");
+        market.addIndustry("orbitalworks");
+        market.addIndustry("militarybase");
+        market.addIndustry("grounddefenses");
+        market.addSubmarket("open_market");
+        market.addSubmarket("storage");
+        market.addSubmarket("generic_military");
+        market.addSubmarket("black_market");
+
+        if (market.getIndustry("orbitalworks") != null) {
+            market.getIndustry("orbitalworks").setSpecialItem(
+                    new SpecialItemData("corrupted_nanoforge", null));
+        }
+
+        sector.getEconomy().addMarket(market, true);
+        market.reapplyConditions();
+        market.reapplyIndustries();
+        LOG.info("GS WorldGen: Vindex military production market added");
+    }
+
+    /** Adds The Gulf to older saves and keeps The Arena in its orbit. */
+    public static void ensureGulf(SectorAPI sector) {
+        if (sector == null) return;
+        StarSystemAPI system = sector.getStarSystem(SYSTEM_ID);
+        if (system == null) return;
+        SectorEntityToken star = system.getStar();
+        if (star == null) return;
+
+        SectorEntityToken gulfEntity = sector.getEntityById(GULF_ID);
+        PlanetAPI gulf;
+        if (gulfEntity instanceof PlanetAPI) {
+            gulf = (PlanetAPI) gulfEntity;
+        } else {
+            gulf = system.addPlanet(GULF_ID, star, "The Gulf", "jungle",
+                    165f, 220f, 6500f, 310f);
+        }
+        if (gulf == null) {
+            LOG.error("GS WorldGen: Failed to create The Gulf in an existing campaign");
+            return;
+        }
+        gulf.setCustomDescriptionId("gs_the_gulf");
+
+        SectorEntityToken arena = sector.getEntityById(STATION_ID);
+        if (arena != null) arena.setCircularOrbitPointingDown(gulf, 0f, 350f, 25f);
     }
 
     private static void addVarro(SectorAPI sector, MarketAPI market) {
@@ -171,44 +279,6 @@ public class GladiatorSociety_WorldGen implements SectorGeneratorPlugin {
         market.addPerson(varro);
         market.getCommDirectory().addPerson(varro);
         LOG.info("GS WorldGen: Commander Varro added to Gladius Prime");
-    }
-
-    private static void spawnSystemFleet(StarSystemAPI system) {
-        try {
-            FleetParamsV3 params = new FleetParamsV3(
-                    null, null,
-                    GS_FACTION,
-                    null,
-                    FleetTypes.PATROL_LARGE,
-                    300f,
-                    20f,
-                    0f, 0f, 0f, 0f, 1f
-            );
-            params.quality = 0.75f;
-            params.withOfficers = true;
-
-            CampaignFleetAPI fleet = FleetFactoryV3.createFleet(params);
-            if (fleet == null || fleet.isEmpty()) return;
-
-            fleet.setName("GS Defense Force");
-            fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_PATROL_FLEET, true);
-            fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_MAKE_AGGRESSIVE, false);
-            fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_MAKE_NON_AGGRESSIVE, true);
-            fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_MAKE_HOSTILE, false);
-            // Prevent this patrol from joining any battles
-            fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_ALLOW_PLAYER_BATTLE_JOIN_TOFF, true);
-            fleet.getMemoryWithoutUpdate().set("$gs_patrol_fleet", true);
-
-            SectorEntityToken planet = Global.getSector().getEntityById(PLANET_ID);
-            if (planet != null) {
-                fleet.setLocation(planet.getLocation().x + 500f, planet.getLocation().y);
-            }
-            system.addEntity(fleet);
-            fleet.addAssignment(FleetAssignment.PATROL_SYSTEM, system.getCenter(), Float.MAX_VALUE);
-            LOG.info("GS WorldGen: System patrol fleet spawned");
-        } catch (Throwable t) {
-            LOG.error("GS WorldGen: Failed to spawn system fleet", t);
-        }
     }
 
     public static void setFactionProperties(SectorAPI sector) {
@@ -251,8 +321,8 @@ public class GladiatorSociety_WorldGen implements SectorGeneratorPlugin {
         gs.setRelationship(Factions.TRITACHYON,    RepLevel.SUSPICIOUS);
         gs.setRelationship(Factions.INDEPENDENT,   RepLevel.NEUTRAL);
         gs.setRelationship(Factions.LUDDIC_CHURCH, RepLevel.SUSPICIOUS);
-        gs.setRelationship(Factions.PIRATES,       RepLevel.INHOSPITABLE);
         gs.setRelationship(Factions.LUDDIC_PATH,   RepLevel.HOSTILE);
+        gs.setRelationship(Factions.PIRATES,       RepLevel.HOSTILE);
         gs.setRelationship(Factions.REMNANTS,      RepLevel.HOSTILE);
     }
 }

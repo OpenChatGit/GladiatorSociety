@@ -4,7 +4,7 @@
   "randomFleet":true,
   "dsrandom":1,
   "reward":1000000,
-  "mainShipCustom":["GladiatorSociety_spore","swp_boss_sporeship"],
+  "mainShipCustom":["spore/GladiatorSociety_spore","swp_boss_sporeship"],
   "needBounty":"Derelict",
   "combatPoints":80,
   "description":"Society organizers have taken great pains to arrange this match for you, as thanks for all of the deaths you have caused for their gain. Fully repaired from the damage it suffered in the Grand Tournament, the recovered Domain Exploraria Sporeship stands ready to face your fleet and defend its title.",

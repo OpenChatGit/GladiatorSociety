@@ -1,0 +1,2 @@
+name,id,tags,planetary,decivRemove,script,desc,icon,order
+The Gulf Restriction,gs_gulf_restriction,"show_in_codex",TRUE,,src.data.scripts.world.GulfRestrictionCondition,"The Society classifies The Gulf as unsuitable for settlement. No verified cause is recorded in public survey data.",graphics/icons/markets/uninhabitable.png,149

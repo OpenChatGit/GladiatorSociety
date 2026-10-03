@@ -1,2 +1,6 @@
 .kiro
 dist/
+__pycache__/
+*.py[cod]
+build/classes/
+build/validation-classes/

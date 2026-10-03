@@ -98,7 +98,11 @@ public class GladiatorSociety_FactionDiscovery {
                     }
                 }
             }
-        } catch (Throwable ignored) {}
+        } catch (RuntimeException ex) {
+            needRefresh = true;
+            Global.getLogger(GladiatorSociety_FactionDiscovery.class)
+                    .warn("Could not compare cached factions; refreshing the discovery cache", ex);
+        }
         if (needRefresh) {
             refresh();
             // refresh() stores a new Result instance in persistent data; reacquire it

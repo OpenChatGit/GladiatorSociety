@@ -1,3 +1,33 @@
+## Version 1.6.8 (Faction Expansion, The Gulf & Reliability)
+
+### Content additions
+
+- Added The Gulf, an uninhabited jungle world that the Society classifies as unsuitable for settlement despite the lack of a verified public cause.
+- Moved The Arena station into orbit around The Gulf and added a save migration for existing campaigns.
+- Added the narrative-only Gulf Restriction condition. It appears after a colony is established and currently has no gameplay effect or event trigger.
+- Added Vindex, a militarized production moon orbiting Gladius Prime, with mining, orbital works, a corrupted nanoforge, and military infrastructure.
+- Added an idempotent save migration for Vindex and its market that preserves existing market ownership.
+- Expanded the Society's lore to cover its Hegemony origins, independent charter, military structure, black market policy, Gladius Prime, Vindex, The Gulf, and The Arena.
+
+### Faction and balance changes
+
+- Classified hand weapons and AI cores as contraband alongside drugs and organs.
+- Made pirates openly hostile while retaining hostility toward the Luddic Path and Remnants. Added matching Nexerelin starting relations and kept the Society on guarded terms with other major powers.
+- Enabled regular faction patrols and configured Nexerelin industrial colony targeting with a 0.45 expedition chance.
+- Limited Nexerelin special forces to one active detachment, reduced detachment fleet size, and slightly reduced patrol fleet size.
+- Moved Vindex to a wider orbit around Gladius Prime, including existing campaigns.
+
+### Reliability and build improvements
+
+- Added automated checks for mod JSON, bounty references, custom variant files, market condition registrations, and key CSV configuration before packaging a release.
+- Added a local validation command that compiles Java against the installed Starsector, LazyLib, and RAT APIs without rebuilding the release JAR.
+- Added a manual release workflow trigger and made release uploads safe to rerun for an existing tag.
+- Replaced silent faction-discovery and fleet-validation fallbacks with actionable warnings.
+- Split JSON-backed custom ship variant creation out of the fleet factory and added circular module-reference protection.
+- Corrected the Spore flagship custom variant path and logged skipped planets during Redacted Pit generation.
+
+============================================================
+
 ## Version 1.6.4 (Stability, Rewards & Build Fixes)
 
 ### Bug fixes

@@ -50,13 +50,28 @@ public class GladiatorSociety_ModPlugin extends BaseModPlugin {
 
     @Override
     public void onNewGameAfterEconomyLoad() {
-        // Economy is now loaded - market exists, we can add submarkets, Varro, and patrol fleet
+        // Economy is now loaded, so market data is available for post-setup work.
         GladiatorSociety_WorldGen.postEconomySetup(Global.getSector());
+        registerGulfConditionWatcher();
 
         // Ensure faction is visible in Intel tab
         FactionAPI gs = Global.getSector().getFaction(GladiatorSociety_Constants.GSFACTION_ID);
         if (gs != null) {
             gs.setShowInIntelTab(true);
+        }
+    }
+
+    @Override
+    public void onGameLoad(boolean newGame) {
+        // Add Vindex to existing campaigns as well as newly generated sectors.
+        GladiatorSociety_WorldGen.ensureGulf(Global.getSector());
+        GladiatorSociety_WorldGen.ensureMilitaryMoonMarket(Global.getSector());
+        registerGulfConditionWatcher();
+    }
+
+    private void registerGulfConditionWatcher() {
+        if (!Global.getSector().hasScript(GulfConditionWatcher.class)) {
+            Global.getSector().addScript(new GulfConditionWatcher());
         }
     }
 
