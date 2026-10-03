@@ -1,3 +1,34 @@
+## Version 1.6.4 (Stability, Rewards & Build Fixes)
+
+### Bug fixes
+
+- Endless and Fleet Battle faction discovery now returns the refreshed cache on the first request.
+- Endless faction lookup uses a safe fallback instead of retrying forever.
+- `includeHidden` now filters factions hidden from the Intel screen; whitelist entries remain explicit opt-ins.
+- Whitelisted factions are no longer rejected by generic fleet validation.
+- Bounty and Endless fleets are added to the current location before their encounter starts.
+- Failed bounty fleet generation no longer consumes the bounty or opens an invalid encounter.
+- Stale bounty menu selections are checked before indexing the mission list.
+- Invalid bounty, Endless faction, and reward CSV rows are skipped individually instead of aborting later entries.
+- Invalid `mainShipCustom` and incomplete `advships` entries are handled safely.
+- Custom variant parsing handles malformed variant data without crashing fleet creation.
+- Fleet generation falls back safely when a faction has no usable doctrine and restores `FleetParamsV3.source` after use.
+- Bushido system handles hulls with no weapon slots.
+- Ship hull IDs are accepted for ship blueprints and hull rewards.
+- Direct ship rewards add ships instead of treating them as fighter wings.
+- Unique ship rewards use the generated ship variant, including variants absent from the global registry.
+- Fleet Battle blueprint reward weighting uses the Fleet Battle round.
+
+### Improvements
+
+- Faction discovery configuration is loaded once and reused.
+- Round-specific reward access returns a copy so callers cannot mutate loaded reward data.
+- Fleet faction fallback selection performs one picker draw per faction.
+- Build script handles Starsector and mod paths containing spaces and locates versioned LazyLib folders.
+- Build targets Java 8 with `--release` and compiles without unchecked or Java target warnings.
+
+============================================================
+
 ## Version 1.6.3 (Loot Fix):
 
 BUGFIX: Fixed debris fields in both Pits showing "Nothing of Value Was Found"

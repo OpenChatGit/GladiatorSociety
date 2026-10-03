@@ -66,7 +66,7 @@ public class GladiatorSociety_BlueprintRewardSystem {
      */
     public static List<RoundSpecificReward> getRoundSpecificRewards(int currentRound) {
         if (ROUND_SPECIFIC_REWARDS.containsKey(currentRound)) {
-            return ROUND_SPECIFIC_REWARDS.get(currentRound);
+            return new ArrayList<>(ROUND_SPECIFIC_REWARDS.get(currentRound));
         }
         return new ArrayList<>();
     }
@@ -196,7 +196,8 @@ public class GladiatorSociety_BlueprintRewardSystem {
         } catch (Exception ignored) {}
         
         try {
-            if (Global.getSettings().doesVariantExist(resourceId)) {
+            if (Global.getSettings().doesVariantExist(resourceId)
+                    || Global.getSettings().getHullSpec(resourceId) != null) {
                 return RewardType.SHIP;
             }
         } catch (Exception ignored) {}
@@ -227,7 +228,8 @@ public class GladiatorSociety_BlueprintRewardSystem {
         } catch (Exception ignored) {}
         
         try {
-            if (Global.getSettings().doesVariantExist(itemId)) {
+            if (Global.getSettings().doesVariantExist(itemId)
+                    || Global.getSettings().getHullSpec(itemId) != null) {
                 return Items.SHIP_BP;
             }
         } catch (Exception ignored) {}
@@ -246,11 +248,6 @@ public class GladiatorSociety_BlueprintRewardSystem {
      * @param creditValue The credit value of the current round
      * @param playerCargo The player's cargo
      */
-    /**
-     * Gives a blueprint based on the credit value of the round
-     * @param creditValue The credit value of the current round
-     * @param playerCargo The player's cargo
-     */
     public static void giveBlueprintReward(int creditValue, CargoAPI playerCargo) {
         // Get the current round from the EndlessContent
         int currentRound = 0;
@@ -259,6 +256,16 @@ public class GladiatorSociety_BlueprintRewardSystem {
             if (content instanceof src.data.scripts.campaign.GladiatorSociety_EndlessContent) {
                 currentRound = ((src.data.scripts.campaign.GladiatorSociety_EndlessContent) content).getEndlessRound();
             }
+        }
+
+        giveBlueprintReward(creditValue, playerCargo, currentRound);
+    }
+
+    /** Gives a blueprint using the round number of the calling game mode. */
+    public static void giveBlueprintReward(int creditValue, CargoAPI playerCargo, int currentRound) {
+        if (playerCargo == null) {
+            LOG.warn("GS Blueprint Reward: Cannot give a blueprint without player cargo");
+            return;
         }
         
         LOG.info("GS Blueprint Reward: Giving blueprint for credit value: " + creditValue + " in round " + currentRound);
@@ -336,8 +343,29 @@ public class GladiatorSociety_BlueprintRewardSystem {
                 break;
                 
             case SHIP:
-                playerCargo.addFighters(reward.resourceId, reward.quantity);
-                GladiatorSociety_RewardIntel.notifyShip(reward.description);
+                try {
+                    com.fs.starfarer.api.fleet.FleetMemberAPI ship;
+                    if (Global.getSettings().doesVariantExist(reward.resourceId)) {
+                        ship = Global.getFactory().createFleetMember(
+                                com.fs.starfarer.api.fleet.FleetMemberType.SHIP, reward.resourceId);
+                    } else {
+                        com.fs.starfarer.api.combat.ShipHullSpecAPI hull =
+                                Global.getSettings().getHullSpec(reward.resourceId);
+                        if (hull == null) {
+                            LOG.warn("GS Specific Reward: Unknown ship or hull " + reward.resourceId);
+                            return;
+                        }
+                        com.fs.starfarer.api.combat.ShipVariantAPI variant =
+                                Global.getSettings().createEmptyVariant("gs_reward_" + hull.getHullId(), hull);
+                        ship = Global.getFactory().createFleetMember(
+                                com.fs.starfarer.api.fleet.FleetMemberType.SHIP, variant);
+                    }
+                    if (ship == null) return;
+                    Global.getSector().getPlayerFleet().getFleetData().addFleetMember(ship);
+                    GladiatorSociety_RewardIntel.notifyShip(reward.description);
+                } catch (RuntimeException ex) {
+                    LOG.error("GS Specific Reward: Could not add ship " + reward.resourceId, ex);
+                }
                 break;
                 
             case FIGHTER:
@@ -380,7 +408,8 @@ public class GladiatorSociety_BlueprintRewardSystem {
         try {
             switch (blueprintType) {
                 case Items.SHIP_BP:
-                    return Global.getSettings().doesVariantExist(itemId);
+                    return Global.getSettings().doesVariantExist(itemId)
+                            || Global.getSettings().getHullSpec(itemId) != null;
                 case Items.WEAPON_BP:
                     return Global.getSettings().getWeaponSpec(itemId) != null;
                 case Items.FIGHTER_BP:

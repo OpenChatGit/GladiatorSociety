@@ -49,35 +49,37 @@ public class GladiatorSociety_JSONBountyRead {
             JSONArray bountyCsv = Global.getSettings().getMergedSpreadsheetDataForMod("missionid", BOUNTYPATH, GladiatorSociety_Constants.MOD_ID);
             LOG.info("GS: Get every JSON Bounty");
             for (int x = 0; x < bountyCsv.length(); x++) {
-                GladiatorSociety_BountyData bounty = new GladiatorSociety_BountyData();
-
-                JSONObject row = bountyCsv.getJSONObject(x);
-
-                bounty.missionid = row.getString("missionid");
-                if (bounty.missionid == null || bounty.missionid.isEmpty()) {
-                    continue;
+                try {
+                    GladiatorSociety_BountyData bounty = new GladiatorSociety_BountyData();
+                    JSONObject row = bountyCsv.getJSONObject(x);
+                    bounty.missionid = row.optString("missionid", "");
+                    if (bounty.missionid.isEmpty()) continue;
+                    bounty = loadBounty(bounty, bounty.missionid);
+                    if (bounty != null) {
+                        BOUNTY_LIST.add(bounty);
+                        LOG.info("|||   Bounty valid   |||");
+                    } else {
+                        LOG.info("|||   Bounty not valid   |||");
+                    }
+                } catch (JSONException | IOException | RuntimeException ex) {
+                    LOG.warn("GS: Skipping invalid bounty row " + x, ex);
                 }
-                bounty = loadBounty(bounty, bounty.missionid);
-
-                if (bounty != null) {
-                    BOUNTY_LIST.add(bounty);
-                    LOG.info("|||   Bounty valid   |||");
-                    continue;
-                }
-                LOG.info("|||   Bounty not valid   |||");
-
             }
             LOG.info("|||   Check WhiteList for Endless Factions   |||");
             JSONArray endlessCsv = Global.getSettings().getMergedSpreadsheetDataForMod("factionid", ENDLESSPATH, GladiatorSociety_Constants.MOD_ID);
             for (int x = 0; x < endlessCsv.length(); x++) {
-                JSONObject row = endlessCsv.getJSONObject(x);
-                String fac = row.getString("factionid");
-                ENDLESS_LIST.add(fac);
+                try {
+                    String fac = endlessCsv.getJSONObject(x).optString("factionid", "");
+                    if (!fac.isEmpty() && Global.getSector().getFaction(fac) != null) ENDLESS_LIST.add(fac);
+                } catch (JSONException | RuntimeException ex) {
+                    LOG.warn("GS: Skipping invalid endless faction row " + x, ex);
+                }
             }
             LOG.info("|||  Done  |||");
             LOG.info("|||   Check reward for Endless Battle  |||");
             JSONArray endlessRewardCsv = Global.getSettings().getMergedSpreadsheetDataForMod("id_reward", ENDLESSREWARDPATH, GladiatorSociety_Constants.MOD_ID);
             for (int x = 0; x < endlessRewardCsv.length(); x++) {
+                try {
                 JSONObject row = endlessRewardCsv.getJSONObject(x);
                 String str = row.optString("id_reward", "");
                 if (str.isEmpty()) {
@@ -194,6 +196,9 @@ public class GladiatorSociety_JSONBountyRead {
                 reward.description = row.optString("description", "Description not found");
                 reward.roundReward = row.optInt("roundReward", 0);
                 ENDLESS_REWARD_LIST.add(reward);
+                } catch (JSONException | RuntimeException ex) {
+                    LOG.warn("GS: Skipping invalid endless reward row " + x, ex);
+                }
 
             }
             LOG.info("|||  Done  |||");
@@ -299,19 +304,21 @@ public class GladiatorSociety_JSONBountyRead {
         LOG.info("Officer Personality: " + bounty.flagship.personality);
 
         bounty.flagship.ship = settings.optString("mainShip", "tempest_Attack");
-        if (Global.getSettings().getVariant(bounty.flagship.ship) == null) {
-            LOG.error(" --- Null mainShip variant: " + bounty.flagship.ship + " --- ");
-            return null;
-        }
         JSONArray mainshipcustom = settings.optJSONArray("mainShipCustom");
         if (mainshipcustom != null) {
+            if (mainshipcustom.length() < 2) {
+                LOG.error(" --- mainShipCustom must contain a variant id and hull id: " + missionid + " --- ");
+                return null;
+            }
             bounty.flagship.ship = mainshipcustom.getString(0);
             bounty.flagship.hullid = mainshipcustom.getString(1);
             if (Global.getSettings().getHullSpec(bounty.flagship.hullid) == null) {
                 LOG.error(" --- Null mainShip hull: " + bounty.flagship.hullid + " --- ");
                 return null;
             }
-
+        } else if (Global.getSettings().getVariant(bounty.flagship.ship) == null) {
+            LOG.error(" --- Null mainShip variant: " + bounty.flagship.ship + " --- ");
+            return null;
         }
 
         LOG.info("Main ship: " + bounty.flagship.ship);
@@ -405,8 +412,12 @@ public class GladiatorSociety_JSONBountyRead {
             GladiatorSociety_DataShip newship;
             for (int i = 0; i < jsonadvships.length(); i++) {
                 arr = jsonadvships.getJSONArray(i);
+                if (arr.length() < 2) {
+                    LOG.warn("Skipping advships entry without variant and count in " + bounty.missionid);
+                    continue;
+                }
 
-                String perso = arr.getString(2);
+                String perso = arr.optString(2, "steady");
                 switch (perso) {
                     case "timid":
                     case "aggressive":

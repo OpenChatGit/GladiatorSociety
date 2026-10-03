@@ -165,7 +165,13 @@ public class GladiatorSociety_GladiatorEndless extends BaseCommandPlugin {
         dialog.getTextPanel().addParagraph("The mission has been accepted.");
 
         final SectorEntityToken entity = dialog.getInteractionTarget();
-        final CampaignFleetAPI endlessfleet = spawnFleet(endcontent);
+        CampaignFleetAPI generatedFleet = null;
+        try {
+            generatedFleet = spawnFleet(endcontent);
+        } catch (RuntimeException ex) {
+            Global.getLogger(GladiatorSociety_GladiatorEndless.class).error("Failed to generate endless fleet", ex);
+        }
+        final CampaignFleetAPI endlessfleet = generatedFleet;
         // Safety: if fleet couldn't be generated, bail gracefully to avoid NPE in FID init
         if (endlessfleet == null) {
             dialog.getTextPanel().addParagraph("Error: could not generate a gladiator fleet. Please try again.", Color.RED);
@@ -324,6 +330,11 @@ public class GladiatorSociety_GladiatorEndless extends BaseCommandPlugin {
         fleet.getAI().addAssignment(FleetAssignment.INTERCEPT, Global.getSector().getPlayerFleet(), 1000000f, null);
         fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_MAKE_AGGRESSIVE, true);
         fleet.getMemoryWithoutUpdate().set("$dialog", "The gladiator glares at you briefly before shutting down the comm link.");
+        CampaignFleetAPI player = Global.getSector().getPlayerFleet();
+        if (fleet.getContainingLocation() == null) {
+            Global.getSector().getCurrentLocation().addEntity(fleet);
+        }
+        fleet.setLocation(player.getLocation().x + 500f, player.getLocation().y + 500f);
     //fleet.getInflater().setRemoveAfterInflating(false);
 					
         return fleet;

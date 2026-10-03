@@ -133,7 +133,8 @@ public class GladiatorSociety_FleetBattleContent {
         for (String fac : src.data.scripts.campaign.GladiatorSociety_JSONBountyRead.getAllEndlessFactionCopy()) {
             enemyPicker.add(fac, 1f);
         }
-        nextEnemyFaction = enemyPicker.isEmpty() ? Factions.PIRATES : (enemyPicker.pick() == null ? Factions.PIRATES : enemyPicker.pick());
+        String fallbackEnemy = enemyPicker.pick();
+        nextEnemyFaction = fallbackEnemy == null ? Factions.PIRATES : fallbackEnemy;
 
         WeightedRandomPicker<String> allyPicker = new WeightedRandomPicker<>();
         allyPicker.add(Factions.INDEPENDENT, 1f);
@@ -141,7 +142,8 @@ public class GladiatorSociety_FleetBattleContent {
         allyPicker.add(Factions.TRITACHYON, 1f);
         allyPicker.add(Factions.LIONS_GUARD, 1f);
         allyPicker.add(Factions.PERSEAN, 1f);
-        nextAllyFaction = allyPicker.isEmpty() ? Factions.INDEPENDENT : (allyPicker.pick() == null ? Factions.INDEPENDENT : allyPicker.pick());
+        String fallbackAlly = allyPicker.pick();
+        nextAllyFaction = fallbackAlly == null ? Factions.INDEPENDENT : fallbackAlly;
     }
 
     /**
@@ -155,7 +157,7 @@ public class GladiatorSociety_FleetBattleContent {
             if (GladiatorSociety_BlueprintRewardSystem.shouldGiveBlueprintReward(r)) {
                 int creditReward = getCreditReward();
                 GladiatorSociety_BlueprintRewardSystem.giveBlueprintReward(creditReward,
-                        Global.getSector().getPlayerFleet().getCargo());
+                        Global.getSector().getPlayerFleet().getCargo(), r);
             }
         } catch (Throwable t) {
             Global.getLogger(GladiatorSociety_FleetBattleContent.class).warn("Blueprint reward failed", t);
@@ -182,12 +184,11 @@ public class GladiatorSociety_FleetBattleContent {
             FleetMemberAPI chosen = picker.pick();
             if (chosen == null) return false;
 
-            String variantId = chosen.getVariant().getHullVariantId();
-            // In some cases, we may need to fallback to base hull ID
-            if (!Global.getSettings().doesVariantExist(variantId)) {
-                variantId = chosen.getHullSpec().getHullId();
-            }
-            FleetMemberAPI ship = Global.getFactory().createFleetMember(FleetMemberType.SHIP, variantId);
+            if (chosen.getVariant() == null) return false;
+            // Use the actual generated variant; its ID may be transient or absent from
+            // the global variant registry for modded fleet compositions.
+            FleetMemberAPI ship = Global.getFactory().createFleetMember(
+                    FleetMemberType.SHIP, chosen.getVariant().clone());
             Global.getSector().getPlayerFleet().getFleetData().addFleetMember(ship);
             shipRewardTaken.add(chosen.getHullSpec().getHullId());
             GladiatorSociety_RewardIntel.notifyShip(chosen.getHullSpec().getHullNameWithDashClass());

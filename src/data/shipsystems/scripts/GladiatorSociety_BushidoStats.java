@@ -40,28 +40,29 @@ public class GladiatorSociety_BushidoStats extends BaseShipSystemScript {
         if (stats.getEntity() instanceof ShipAPI) {
 
             ShipAPI ship = (ShipAPI) stats.getEntity();
+            com.fs.starfarer.api.combat.CombatEngineAPI engine = Global.getCombatEngine();
+            if (engine == null) return;
 
             if (effectLevel > 0f) {
                 ship.setWeaponGlow(effectLevel, Misc.setAlpha(JITTER_UNDER_COLOR, 255), EnumSet.of(WeaponType.BALLISTIC));
             }
 
             String key = ship.getId() + "_" + id;
-            Object test = Global.getCombatEngine().getCustomData().get(key);
+            Object test = engine.getCustomData().get(key);
             if (state == State.IN) {
                 if (test == null && effectLevel > 0.2f) {
-                    Global.getCombatEngine().getCustomData().put(key, new Object());
+                    engine.getCustomData().put(key, new Object());
 
-                    ship.getHullSpec().getAllWeaponSlotsCopy().get(0).computePosition(ship);
                     for (WeaponSlotAPI weapon : ship.getHullSpec().getAllWeaponSlotsCopy()) {
                         if (weapon.isSystemSlot()) {
-                            Global.getCombatEngine().spawnProjectile(ship, null, "flarelauncher1", weapon.computePosition(ship), weapon.getAngle() + ship.getFacing(), ship.getVelocity());
+                            engine.spawnProjectile(ship, null, "flarelauncher1", weapon.computePosition(ship), weapon.getAngle() + ship.getFacing(), ship.getVelocity());
                         }
 
                     }
 
                 }
             } else if (state == State.OUT && test != null) {
-                Global.getCombatEngine().getCustomData().remove(key);
+                engine.getCustomData().remove(key);
 
             }
         }

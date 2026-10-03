@@ -20,7 +20,7 @@ $CP_ENTRIES = @(
 )
 
 # Add LazyLib if installed
-$lazylib = Get-ChildItem "$SS_MODS\LazyLib\jars\LazyLib.jar" -ErrorAction SilentlyContinue | Select-Object -First 1
+$lazylib = Get-ChildItem "$SS_MODS\LazyLib*\jars\LazyLib.jar" -ErrorAction SilentlyContinue | Select-Object -First 1
 if (!$lazylib) {
     $lazylib = Get-ChildItem "$SS_MODS\lw_lazylib\jars\*.jar" -ErrorAction SilentlyContinue | Select-Object -First 1
 }
@@ -64,12 +64,27 @@ if (Test-Path $BUILD_DIR) { Remove-Item $BUILD_DIR -Recurse -Force }
 New-Item -ItemType Directory -Path $BUILD_DIR | Out-Null
 
 # Write sources to a file list (avoids command line length limits)
-$SOURCES_FILE = "build\sources.txt"
 New-Item -ItemType Directory -Path "build" -Force | Out-Null
-$SOURCES | Set-Content $SOURCES_FILE
 
 Write-Host "Compiling..."
-& $JAVAC -source 8 -target 8 -encoding UTF-8 -cp $CLASSPATH -d $BUILD_DIR "@$SOURCES_FILE"
+# javac response files preserve paths containing spaces; passing the semicolon-
+# separated classpath directly through PowerShell can split it at those spaces.
+$JAVAC_ARGS_FILE = "build\javac.args"
+$JAVAC_ARGS = @(
+    "--release"
+    "8"
+    "-encoding"
+    "UTF-8"
+    "-Xlint:unchecked"
+    "-cp"
+    ('"' + ($CLASSPATH -replace '\\', '/') + '"')
+    "-d"
+    ('"' + ($BUILD_DIR -replace '\\', '/') + '"')
+)
+$JAVAC_ARGS += $SOURCES | ForEach-Object { '"' + ($_ -replace '\\', '/') + '"' }
+$JAVAC_ARGS | Set-Content -Encoding ASCII $JAVAC_ARGS_FILE
+& $JAVAC "@$JAVAC_ARGS_FILE"
+Remove-Item $JAVAC_ARGS_FILE -Force
 
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Compilation failed!"

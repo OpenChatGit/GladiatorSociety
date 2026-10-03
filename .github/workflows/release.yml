@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  package-and-release:
+    name: Package mod and publish release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v4
+
+      - name: Build release ZIP
+        run: python3 .github/scripts/package_release.py "$GITHUB_REF_NAME"
+
+      - name: Check Markdown release notes
+        run: test -s ".github/release-notes/${GITHUB_REF_NAME}.md"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "$GITHUB_REF_NAME" "dist/GladiatorSociety-${GITHUB_REF_NAME}.zip" --verify-tag --title "Gladiator Society ${GITHUB_REF_NAME}" --notes-file ".github/release-notes/${GITHUB_REF_NAME}.md"

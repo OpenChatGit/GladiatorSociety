@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class GladiatorSociety_FactionDiscoveryConfig {
+    private static GladiatorSociety_FactionDiscoveryConfig cached;
     public final Set<String> whitelist = new HashSet<>();
     public final Set<String> blacklist = new HashSet<>();
     public boolean includeHidden = false;
@@ -18,7 +19,8 @@ public class GladiatorSociety_FactionDiscoveryConfig {
     public String validationFleetType = "gs_validation";
     public float vanillaModdedSplit = 0.5f;
 
-    public static GladiatorSociety_FactionDiscoveryConfig load() {
+    public static synchronized GladiatorSociety_FactionDiscoveryConfig load() {
+        if (cached != null) return cached;
         GladiatorSociety_FactionDiscoveryConfig cfg = new GladiatorSociety_FactionDiscoveryConfig();
         try {
             JSONObject json = Global.getSettings().getMergedJSONForMod("data/config/gs_factions.json", "gladiatorsociety");
@@ -33,7 +35,8 @@ public class GladiatorSociety_FactionDiscoveryConfig {
         } catch (Throwable t) {
             Global.getLogger(GladiatorSociety_FactionDiscoveryConfig.class).warn("Failed to load gs_factions.json, using defaults", t);
         }
-        return cfg;
+        cached = cfg;
+        return cached;
     }
 
     private static void fillSet(Set<String> set, JSONArray arr) {

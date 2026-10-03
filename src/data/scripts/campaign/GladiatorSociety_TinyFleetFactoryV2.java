@@ -128,7 +128,7 @@ public class GladiatorSociety_TinyFleetFactoryV2 {
                         //  LOG.info("weaponslist: " +weaponslist);
                         if (weaponslist != null) {
                             // LOG.info("Number of weapons on the weapon group: " +weaponslist.length());
-                            Iterator<Object> iterator = weaponslist.keys();
+                            Iterator<?> iterator = weaponslist.keys();
 
                             while (iterator.hasNext()) {
                                 String slot = (String) iterator.next();
@@ -180,8 +180,8 @@ public class GladiatorSociety_TinyFleetFactoryV2 {
                 LOG.info("|||  The json do not exist  |||");
             }
 
-        } catch (IOException | JSONException ex) {
-            LOG.info("|||  Error JSON, report to Snrasha because you cannot have this bug.  |||");
+        } catch (IOException | JSONException | RuntimeException ex) {
+            LOG.warn("Failed to create custom variant " + variantid, ex);
         }
         LOG.info("||| Failed to create the variant ship.  |||");
         return null;
@@ -215,12 +215,17 @@ public class GladiatorSociety_TinyFleetFactoryV2 {
 
     public static CampaignFleetAPI createFleet(FleetParamsV3 params, GladiatorSociety_BountyData mission,PersonAPI person) {
         Global.getSettings().profilerBegin("GladiatorSociety_TinyFleetFactoryV2.createFleet()");
+        MarketAPI originalSource = params == null ? null : params.source;
         try {
+            if (params == null || mission == null || mission.flagship == null || person == null) {
+                LOG.warn("Cannot generate bounty fleet: required fleet parameters are missing");
+                return null;
+            }
             GladiatorSociety_DataShip mothership = mission.flagship;
-            List<GladiatorSociety_DataShip> ships = mission.advships;
+            List<GladiatorSociety_DataShip> ships = mission.advships == null
+                    ? java.util.Collections.<GladiatorSociety_DataShip>emptyList() : mission.advships;
             boolean randomFleet = mission.randomFleet;
 
-            boolean fakeMarket = false;
             MarketAPI market = pickMarket(params);
             if (market == null) {
                 market = Global.getFactory().createMarket("fake", "fake", 5);
@@ -233,7 +238,6 @@ public class GladiatorSociety_TinyFleetFactoryV2 {
 
                 market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyFlat("fake", 1f);
 
-                fakeMarket = true;
             }
             boolean sourceWasNull = params.source == null;
             params.source = market;
@@ -314,6 +318,14 @@ public class GladiatorSociety_TinyFleetFactoryV2 {
             FactionDoctrineAPI doctrine = fleet.getFaction().getDoctrine();
             if (params.doctrineOverride != null) {
                 doctrine = params.doctrineOverride;
+            }
+            if (doctrine == null) {
+                FactionAPI fallbackFaction = Global.getSector().getFaction("independent");
+                doctrine = fallbackFaction == null ? null : fallbackFaction.getDoctrine();
+            }
+            if (doctrine == null) {
+                LOG.warn("Cannot generate fleet for " + factionId + ": faction doctrine is unavailable");
+                return null;
             }
 
             float numShipsMult = 1f;
@@ -405,6 +417,15 @@ public class GladiatorSociety_TinyFleetFactoryV2 {
 
             float doctrineTotal = dW + dC + dP;
 
+            // Some mod factions have incomplete doctrine data. Avoid dividing by zero
+            // and still generate a usable warship fleet for them.
+            if (!(doctrineTotal > 0f) || Float.isInfinite(doctrineTotal)) {
+                dW = 1f;
+                dC = 0f;
+                dP = 0f;
+                doctrineTotal = 1f;
+            }
+
             //System.out.println("DW: " + dW + ", DC: " + dC + " DP: " + dP);
             combatPts = (int) combatPts;
             int warships = (int) (combatPts * dW / doctrineTotal);
@@ -460,10 +481,6 @@ public class GladiatorSociety_TinyFleetFactoryV2 {
                     || fleet.getFleetData().getNumMembers() == fleet.getNumFighters()) {
             }
 
-            if (fakeMarket) {
-                params.source = null;
-            }
-
             /*  DefaultFleetInflaterParams p = new DefaultFleetInflaterParams();
             p.quality = quality;
             p.persistent = true;
@@ -497,6 +514,7 @@ public class GladiatorSociety_TinyFleetFactoryV2 {
             return fleet;
 
         } finally {
+            if (params != null) params.source = originalSource;
             Global.getSettings().profilerEnd();
         }
     }

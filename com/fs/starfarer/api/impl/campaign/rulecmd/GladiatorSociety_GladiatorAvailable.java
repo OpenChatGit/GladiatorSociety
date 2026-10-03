@@ -145,7 +145,11 @@ public class GladiatorSociety_GladiatorAvailable extends BaseCommandPlugin {
 
         opts.clearOptions();
 
-        GladiatorSociety_BountyData mission = content.missions.get(num + content.getMaxConcurrent() * content.getNextSet());
+        GladiatorSociety_BountyData mission = getMissionAt(num);
+        if (mission == null) {
+            bountyAvailable(dialog, memory);
+            return;
+        }
 
         dialog.getTextPanel().addParagraph("Reward: " + mission.bountyvalue + " credits");
         float point = Global.getSector().getPlayerFleet().getFleetPoints();
@@ -186,13 +190,29 @@ public class GladiatorSociety_GladiatorAvailable extends BaseCommandPlugin {
 
         opts.clearOptions();
 
+        GladiatorSociety_BountyData mission = getMissionAt(num);
+        if (mission == null) {
+            bountyAvailable(dialog, memory);
+            return;
+        }
         dialog.getTextPanel().addParagraph("The mission has been accepted.");
         // Global.getSector().getCampaignUI().addMessage("GladiatorSociety_BountyMission playerAccept");
-        GladiatorSociety_BountyData mission = content.missions.get(num + content.getMaxConcurrent() * content.getNextSet());
         //content.missions.get(num+content.getMaxConcurrent()*content.getNextSet()).playerAccept(Global.getSector().getPlayerFleet().getInteractionTarget());
 
         final SectorEntityToken entity = dialog.getInteractionTarget();
-        final CampaignFleetAPI gladiatorfleet = spawnFleet(mission);
+        CampaignFleetAPI generatedFleet = null;
+        try {
+            generatedFleet = spawnFleet(mission);
+        } catch (RuntimeException ex) {
+            Global.getLogger(GladiatorSociety_GladiatorAvailable.class)
+                    .error("Failed to generate bounty fleet " + mission.missionid, ex);
+        }
+        final CampaignFleetAPI gladiatorfleet = generatedFleet;
+        if (gladiatorfleet == null || gladiatorfleet.isEmpty()) {
+            dialog.getTextPanel().addParagraph("The opponent fleet could not be generated. The bounty is still available.", Color.RED);
+            opts.addOption(Misc.ucFirst("back"), "gladiatorDirectoryMain");
+            return;
+        }
         content.missions.remove(mission);//num + content.getMaxConcurrent() * content.getNextSet());
         content.resetNext();
         content.currentMission = mission;
@@ -271,6 +291,17 @@ public class GladiatorSociety_GladiatorAvailable extends BaseCommandPlugin {
         plugin.init(dialog);
 
     }
+
+    private GladiatorSociety_BountyData getMissionAt(int num) {
+        if (content == null || content.missions == null || num < 0 || num >= content.getMaxConcurrent()) {
+            return null;
+        }
+        int index = num + content.getMaxConcurrent() * content.getNextSet();
+        if (index < 0 || index >= content.missions.size()) {
+            return null;
+        }
+        return content.missions.get(index);
+    }
     public static final String CUSTOMPORTRAIT = "customportrait";
 
     private PersonAPI initPerson(GladiatorSociety_BountyData bountydata) {
@@ -334,6 +365,11 @@ public class GladiatorSociety_GladiatorAvailable extends BaseCommandPlugin {
         fleet.getAI().addAssignment(FleetAssignment.INTERCEPT, Global.getSector().getPlayerFleet(), 1000000f, null);
         fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_MAKE_AGGRESSIVE, true);
         fleet.getMemoryWithoutUpdate().set("$dialog", bountydata.dialog);
+        CampaignFleetAPI player = Global.getSector().getPlayerFleet();
+        if (fleet.getContainingLocation() == null) {
+            Global.getSector().getCurrentLocation().addEntity(fleet);
+        }
+        fleet.setLocation(player.getLocation().x + 500f, player.getLocation().y + 500f);
        // fleet.getInflater().setRemoveAfterInflating(false);
 
         

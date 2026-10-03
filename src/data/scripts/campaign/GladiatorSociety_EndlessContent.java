@@ -75,8 +75,11 @@ public class GladiatorSociety_EndlessContent {
      * @return Faction ID
      */
     public String getEndlessFaction() {
-        while (Global.getSector().getFaction(nextFaction) == null) {
+        if (nextFaction == null || Global.getSector().getFaction(nextFaction) == null) {
             setRandomFaction();
+            if (nextFaction == null || Global.getSector().getFaction(nextFaction) == null) {
+                nextFaction = Factions.PIRATES;
+            }
         }
         return this.nextFaction;
     }
@@ -306,18 +309,14 @@ public class GladiatorSociety_EndlessContent {
                     } else {
                         // Add ship hull directly to fleet
                         try {
-                            // Get the default variant for this hull
-                            String variantId = Global.getSettings().getHullSpec(reward.id_Resource).getHullId() + "_Hull";
-                            
-                            // Try to use the hull ID as variant ID if default variant doesn't exist
-                            if (!Global.getSettings().doesVariantExist(variantId)) {
-                                variantId = reward.id_Resource;
-                            }
-                            
-                            // Create a new ship from the variant
+                            com.fs.starfarer.api.combat.ShipHullSpecAPI hull =
+                                    Global.getSettings().getHullSpec(reward.id_Resource);
+                            if (hull == null) throw new IllegalArgumentException("Unknown hull: " + reward.id_Resource);
+                            com.fs.starfarer.api.combat.ShipVariantAPI variant =
+                                    Global.getSettings().createEmptyVariant("gs_reward_" + hull.getHullId(), hull);
                             com.fs.starfarer.api.fleet.FleetMemberAPI ship = 
                                 Global.getFactory().createFleetMember(
-                                    com.fs.starfarer.api.fleet.FleetMemberType.SHIP, variantId);
+                                    com.fs.starfarer.api.fleet.FleetMemberType.SHIP, variant);
                             
                             // Add the ship to the player's fleet
                             Global.getSector().getPlayerFleet().getFleetData().addFleetMember(ship);

@@ -43,18 +43,17 @@ public class GladiatorSociety_FactionDiscovery {
             String id = f.getId();
             res.seenFactionIds.add(id);
             if (cfg.blacklist.contains(id)) continue;
-            if (!cfg.includeHidden) {
-                try {
-                    // Some APIs may not expose hidden; skip check to remain compatible
-                } catch (Throwable ignored) {}
-            }
             if (id.equals("player") || id.equals("neutral")) continue;
 
-            // Whitelist goes in directly
+            // Whitelist entries are explicit opt-ins, including hidden factions.
             if (cfg.whitelist.contains(id)) {
                 res.combatFactions.add(id);
                 continue;
             }
+
+            // Factions hidden from the Intel screen are generally internal/test factions
+            // and should not appear in arena pools unless explicitly requested.
+            if (!cfg.includeHidden && !f.isShowInIntelTab()) continue;
 
             // Initial test: be permissive, include remaining factions (we can tighten later)
             res.combatFactions.add(id);
@@ -64,6 +63,9 @@ public class GladiatorSociety_FactionDiscovery {
         if (cfg.validateUsingFleetGen) {
             java.util.Set<String> toRemove = new java.util.HashSet<>();
             for (String id : res.combatFactions) {
+                // A configured whitelist entry is an explicit opt-in and should not be
+                // removed just because the faction cannot generate a generic patrol.
+                if (cfg.whitelist.contains(id)) continue;
                 if (!canGenerateFleet(id, cfg.minFleetPointsForValidity, cfg.validationFleetType)) {
                     toRemove.add(id);
                 }
@@ -99,6 +101,9 @@ public class GladiatorSociety_FactionDiscovery {
         } catch (Throwable ignored) {}
         if (needRefresh) {
             refresh();
+            // refresh() stores a new Result instance in persistent data; reacquire it
+            // so this first call can use the freshly built faction pool immediately.
+            cached = getCached();
         }
         return new HashSet<>(cached.combatFactions);
     }
