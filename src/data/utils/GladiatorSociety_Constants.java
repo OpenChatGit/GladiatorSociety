@@ -2,7 +2,7 @@ package src.data.utils;
 
 public class GladiatorSociety_Constants {
 
-    public static final String MOD_ID = "gs";
+    public static final String MOD_ID = "gladiatorsociety";
     public static final String GSFACTION_ID = "gladiator";
     public static final String MODSPEC_ITEM_ID = "modspec"; // Hullmod blueprint item ID
     public static final String MISSIONBOUNTY = "GladiatorSociety_EventMissionBattle_v2";
