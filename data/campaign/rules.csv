@@ -86,3 +86,11 @@ FireAll gs_ArenaDialog",,,
 gs_ArenaDialog,gs_ArenaDialog,,,,
 gs_ArenaIntro,gs_ArenaDialog,,"AddText ""Commander Varro nods. 'Welcome to the Gladiator Society. The arena is open - take a fight, earn your keep.'"" $faction.baseColor",,,
 gs_ArenaLeave,gs_ArenaDialog,,"SetShortcut defaultLeave ESCAPE",,30:defaultLeave:Leave,
+gs_CommRelayAccessOption,COB_AddOptions,"$tag:comm_relay
+!$hasMarket
+GladiatorSociety_CommRelayEnabled","SetShortcut gs_comm_relay_open ""G"" true",,90:gs_comm_relay_open:Gladiator Society,
+gs_CommRelayAccessOpen,DialogOptionSelected,"$option == gs_comm_relay_open
+$tag:comm_relay
+!$hasMarket
+GladiatorSociety_CommRelayEnabled","ShowDefaultVisual
+FireAll GladiatorArenaMain",,,

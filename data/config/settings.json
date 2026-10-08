@@ -1,4 +1,5 @@
 {
+  "gs_enableCommRelayAccess": false,
 
   "plugins":{
   },
