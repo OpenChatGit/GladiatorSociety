@@ -2,6 +2,7 @@ package src.data.scripts.campaign;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
+import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
@@ -46,7 +47,12 @@ public class GladiatorSociety_RewardIntel extends BaseIntelPlugin {
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
-        info.addPara(body, 0f, Misc.getHighlightColor(), highlight);
+        // Reward descriptions are data, not String.format templates.
+        LabelAPI label = info.addPara(body, 0f);
+        if (highlight != null && !highlight.isEmpty()) {
+            label.setHighlightColor(Misc.getHighlightColor());
+            label.setHighlight(highlight);
+        }
     }
 
     @Override
