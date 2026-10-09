@@ -1,6 +1,7 @@
 package src.data.scripts.campaign;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import src.data.scripts.campaign.GladiatorSociety_FactionDiscoveryConfig;
@@ -260,11 +261,21 @@ public class GladiatorSociety_EndlessContent {
         private static void processReward(GladiatorSociety_EndlessReward reward) {
             switch (reward.rewardType) {
                 case 2: // Weapon
-                    Global.getSector().getPlayerFleet().getCargo().addWeapons(reward.id_Resource, reward.number);
+                    if (reward.blueprint) {
+                        Global.getSector().getPlayerFleet().getCargo().addSpecial(
+                            new com.fs.starfarer.api.campaign.SpecialItemData(Items.WEAPON_BP, reward.id_Resource), 1);
+                    } else {
+                        Global.getSector().getPlayerFleet().getCargo().addWeapons(reward.id_Resource, reward.number);
+                    }
                     break;
                     
                 case 3: // Fighter
-                    Global.getSector().getPlayerFleet().getCargo().addFighters(reward.id_Resource, reward.number);
+                    if (reward.blueprint) {
+                        Global.getSector().getPlayerFleet().getCargo().addSpecial(
+                            new com.fs.starfarer.api.campaign.SpecialItemData(Items.FIGHTER_BP, reward.id_Resource), 1);
+                    } else {
+                        Global.getSector().getPlayerFleet().getCargo().addFighters(reward.id_Resource, reward.number);
+                    }
                     break;
                     
                 case 4: // Ship variant
@@ -344,10 +355,10 @@ public class GladiatorSociety_EndlessContent {
             String messagePrefix;
             switch (reward.rewardType) {
                 case 2:
-                    messagePrefix = "Weapon Reward: ";
+                    messagePrefix = reward.blueprint ? "Weapon Blueprint Reward: " : "Weapon Reward: ";
                     break;
                 case 3:
-                    messagePrefix = "Fighter Wing Reward: ";
+                    messagePrefix = reward.blueprint ? "Fighter Blueprint Reward: " : "Fighter Wing Reward: ";
                     break;
                 case 4:
                     messagePrefix = reward.blueprint ? "Ship Blueprint Reward: " : "Ship Reward: ";
