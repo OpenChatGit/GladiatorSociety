@@ -11,6 +11,7 @@
     "dsrandom":1,
     "reward":95000,
     "difficulty":"Easy",
+    "needBounty":"GotAProblem",
     "description":"Grak leads a pack of fast, aggressive ships. He doesn't care about tactics - he just throws everything at you at once and hopes something sticks. It usually does.",
     "dialog":"My pack is hungry. You look like a good meal.",
     "avatar":"graphics/portraits/portrait_mercenary03.png"
