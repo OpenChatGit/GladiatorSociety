@@ -1,6 +1,8 @@
 package src.data.scripts.campaign;
 
+
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import src.data.scripts.campaign.GladiatorSociety_FactionDiscoveryConfig;
@@ -12,18 +14,22 @@ import java.util.List;
 import java.util.Set;
 import src.data.scripts.campaign.dataclass.*;
 
+
 /**
  * Manages the endless battle mode content
  */
 public class GladiatorSociety_EndlessContent {
 
+
     private int endlessPower;
     private int endlessRound;
     private String nextFaction;
 
+
     // Legacy reward system - kept for backward compatibility
     private final List<GladiatorSociety_EndlessReward> currentRewardList = new ArrayList<>();
     private final Set<String> rewardTaken = new HashSet<>();
+
 
     /**
      * Constructor - initializes with default values
@@ -34,6 +40,7 @@ public class GladiatorSociety_EndlessContent {
         setRandomFaction();
     }
 
+
     /**
      * Gets the power level for the current round
      * @return Power level multiplied by 1.3 (nerfed from 1.5)
@@ -41,6 +48,7 @@ public class GladiatorSociety_EndlessContent {
     public int getEndlessPower() {
         return (int)(endlessPower*1.3f);
     }
+
 
     /**
      * Increases the power level for the next round
@@ -54,6 +62,7 @@ public class GladiatorSociety_EndlessContent {
         }
     }
 
+
     /**
      * Gets the current round number
      * @return Current round
@@ -62,6 +71,7 @@ public class GladiatorSociety_EndlessContent {
         return endlessRound;
     }
 
+
     /**
      * Sets the current round number
      * @param value Round number
@@ -69,6 +79,7 @@ public class GladiatorSociety_EndlessContent {
     public void setEndlessRound(int value) {
         this.endlessRound = value;
     }
+
 
     /**
      * Gets the faction for the current round
@@ -83,6 +94,7 @@ public class GladiatorSociety_EndlessContent {
         }
         return this.nextFaction;
     }
+
 
     /**
      * Increments the round counter and processes rewards
@@ -104,6 +116,7 @@ public class GladiatorSociety_EndlessContent {
         setRandomFaction();
     }
 
+
     /**
      * Sets a random faction for the next round
      */
@@ -114,6 +127,7 @@ public class GladiatorSociety_EndlessContent {
             nextFaction = Factions.PIRATES;
             return;
         }
+
 
         // Vanilla set mirrors FleetBattleContent
         Set<String> vanilla = new java.util.HashSet<>();
@@ -127,11 +141,13 @@ public class GladiatorSociety_EndlessContent {
         vanilla.add(Factions.DIKTAT);
         vanilla.add(Factions.LIONS_GUARD);
 
+
         java.util.List<String> vanillaBucket = new java.util.ArrayList<>();
         java.util.List<String> moddedBucket = new java.util.ArrayList<>();
         for (String id : pool) {
             if (vanilla.contains(id)) vanillaBucket.add(id); else moddedBucket.add(id);
         }
+
 
         java.util.function.Function<java.util.List<String>, String> pickFrom = list -> {
             if (list == null || list.isEmpty()) return null;
@@ -139,6 +155,7 @@ public class GladiatorSociety_EndlessContent {
             for (String id : list) p.add(id, 1f);
             return p.pick();
         };
+
 
         // Read configurable split for vanilla vs modded
         float split = 0.5f;
@@ -154,6 +171,7 @@ public class GladiatorSociety_EndlessContent {
         nextFaction = picked;
     }
 
+
     /**
      * Calculates the credit reward for the current round.
      * Uses a linear formula tied to endlessPower to stay proportional to fleet strength.
@@ -163,6 +181,7 @@ public class GladiatorSociety_EndlessContent {
     public int getEndlessReward() {
         return endlessPower * 150 + 5000;
     }
+
 
     /**
      * Checks if there are any rewards available through the dialog system
@@ -174,6 +193,7 @@ public class GladiatorSociety_EndlessContent {
         // All rewards are now given automatically
         return false;
     }
+
 
     /**
      * Updates the available rewards list
@@ -187,6 +207,7 @@ public class GladiatorSociety_EndlessContent {
         currentRewardList.clear();
     }
 
+
     /**
      * Gets the current list of rewards
      * @return Empty list in the new system
@@ -194,6 +215,7 @@ public class GladiatorSociety_EndlessContent {
     public List<GladiatorSociety_EndlessReward> getCurrentRewardList() {
         return currentRewardList;
     }
+
 
     /**
      * Gets the set of rewards that have been taken
@@ -203,6 +225,7 @@ public class GladiatorSociety_EndlessContent {
         return this.rewardTaken;
     }
 
+
     /**
      * Adds a reward ID to the taken list
      * @param reward Reward ID
@@ -210,6 +233,7 @@ public class GladiatorSociety_EndlessContent {
     public void addTakenReward(String reward) {
         rewardTaken.add(reward);
     }
+
 
     /**
      * Helper class to process cargo rewards
@@ -260,11 +284,21 @@ public class GladiatorSociety_EndlessContent {
         private static void processReward(GladiatorSociety_EndlessReward reward) {
             switch (reward.rewardType) {
                 case 2: // Weapon
-                    Global.getSector().getPlayerFleet().getCargo().addWeapons(reward.id_Resource, reward.number);
+                    if (reward.blueprint) {
+                        Global.getSector().getPlayerFleet().getCargo().addSpecial(
+                            new com.fs.starfarer.api.campaign.SpecialItemData(Items.WEAPON_BP, reward.id_Resource), 1);
+                    } else {
+                        Global.getSector().getPlayerFleet().getCargo().addWeapons(reward.id_Resource, reward.number);
+                    }
                     break;
                     
                 case 3: // Fighter
-                    Global.getSector().getPlayerFleet().getCargo().addFighters(reward.id_Resource, reward.number);
+                    if (reward.blueprint) {
+                        Global.getSector().getPlayerFleet().getCargo().addSpecial(
+                            new com.fs.starfarer.api.campaign.SpecialItemData(Items.FIGHTER_BP, reward.id_Resource), 1);
+                    } else {
+                        Global.getSector().getPlayerFleet().getCargo().addFighters(reward.id_Resource, reward.number);
+                    }
                     break;
                     
                 case 4: // Ship variant
@@ -344,10 +378,10 @@ public class GladiatorSociety_EndlessContent {
             String messagePrefix;
             switch (reward.rewardType) {
                 case 2:
-                    messagePrefix = "Weapon Reward: ";
+                    messagePrefix = reward.blueprint ? "Weapon Blueprint Reward: " : "Weapon Reward: ";
                     break;
                 case 3:
-                    messagePrefix = "Fighter Wing Reward: ";
+                    messagePrefix = reward.blueprint ? "Fighter Blueprint Reward: " : "Fighter Wing Reward: ";
                     break;
                 case 4:
                     messagePrefix = reward.blueprint ? "Ship Blueprint Reward: " : "Ship Reward: ";
