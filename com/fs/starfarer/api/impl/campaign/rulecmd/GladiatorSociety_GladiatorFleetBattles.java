@@ -298,7 +298,7 @@ public class GladiatorSociety_GladiatorFleetBattles extends BaseCommandPlugin {
                 float random = (int) (Math.random() * 10) / 10f;
                 FleetParamsV3 params = new FleetParamsV3(
                         null, null, faction.getId(), null, FleetTypes.PATROL_MEDIUM,
-                        content.getEnemyPower() + random, 0, 0, 0f, 0f, 0f, 1f);
+                        content.getAllyPower() + random, 0, 0, 0f, 0f, 0f, 1f);
                 params.ignoreMarketFleetSizeMult = true;
                 CampaignFleetAPI fleet = GladiatorSociety_TinyFleetFactoryV2.createFleet(params);
                 if (fleet == null || fleet.isEmpty()) continue;
