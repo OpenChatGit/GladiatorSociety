@@ -1,5 +1,5 @@
 {
- "dependencies":["shadow_ships","ora","diableavionics","brdy","SCY","ArkLeg","istl_dam","kadur_remnant","foundation"],
+ "dependencies":["shadow_ships","ora","diableavionics","brdy","SCY","ArkLeg","istl_dam","kadur_remnant","foundation","swp"],
   "faction":"derelict",
   "randomFleet":true,
   "dsrandom":1,
